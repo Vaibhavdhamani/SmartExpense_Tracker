@@ -1,8 +1,10 @@
 import { useState, useMemo } from 'react';
+import { useNavigate }  from 'react-router-dom';
 import { useExpenses }  from '../hooks/useExpenses';
 import { useBudgets }   from '../hooks/useBudgets';
 import { useCurrency }  from '../hooks/useCurrency';
 import { useSalary }    from '../hooks/useSalary';
+import { useRecurring } from '../hooks/useRecurring';
 import KPICard          from '../components/dashboard/KPICard';
 import DonutChart       from '../components/dashboard/DonutChart';
 import DailyBarChart    from '../components/dashboard/DailyBarChart';
@@ -10,18 +12,19 @@ import BudgetAlerts     from '../components/budgets/BudgetAlerts';
 
 export default function DashboardPage() {
   const [days, setDays] = useState(30);
+  const navigate = useNavigate();
+
   const { expenses, summary, loading: expLoading } = useExpenses(days);
-  const { budgets, loading: budLoading }           = useBudgets();
-  const { format, isUSD }                          = useCurrency();
-  const { hasSalary, getSavingsInfo }              = useSalary();
+  const { budgets,  loading: budLoading }           = useBudgets();
+  const { format, isUSD }                           = useCurrency();
+  const { hasSalary, getSavingsInfo }               = useSalary();
+  const { dueItems }                                = useRecurring();
 
   const totalBudgeted   = budgets.reduce((s, b) => s + b.budgeted, 0);
   const totalSpent      = budgets.reduce((s, b) => s + b.spent, 0);
   const budgetPct       = totalBudgeted > 0 ? (totalSpent / totalBudgeted) * 100 : 0;
   const budgetRemaining = totalBudgeted - totalSpent;
-
-  // Savings info based on salary vs actual spending
-  const savingsInfo = getSavingsInfo(summary?.totalSpending || 0);
+  const savingsInfo     = getSavingsInfo(summary?.totalSpending || 0);
 
   const trendPct = useMemo(() => {
     if (!expenses.length) return 0;
@@ -55,6 +58,26 @@ export default function DashboardPage() {
           <option value={90}>Last 90 days</option>
         </select>
       </div>
+
+      {/* ── Recurring due banner ── */}
+      {dueItems.length > 0 && (
+        <div className="alert alert-warning d-flex align-items-center justify-content-between gap-3 py-2 mb-3">
+          <div className="d-flex align-items-center gap-2">
+            <i className="bi bi-arrow-repeat fs-5" />
+            <div>
+              <strong>{dueItems.length} recurring expense{dueItems.length > 1 ? 's' : ''} due</strong>
+              <div className="small text-muted">
+                {dueItems.slice(0, 2).map(i => i.description).join(', ')}
+                {dueItems.length > 2 && ` +${dueItems.length - 2} more`}
+              </div>
+            </div>
+          </div>
+          <button className="btn btn-sm btn-warning fw-semibold flex-shrink-0"
+            onClick={() => navigate('/recurring')}>
+            Review <i className="bi bi-arrow-right ms-1" />
+          </button>
+        </div>
+      )}
 
       {/* Budget alerts */}
       {alertBudgets.length > 0 && <BudgetAlerts budgets={alertBudgets} />}
@@ -98,7 +121,7 @@ export default function DashboardPage() {
           />
         </div>
 
-        {/* ── Savings KPI (only shown when salary is set) ── */}
+        {/* Savings KPI (only if salary set) */}
         {hasSalary && savingsInfo && (
           <div className="col-6 col-md-3">
             <KPICard
@@ -154,24 +177,14 @@ export default function DashboardPage() {
               icon: '📈', label: 'Top Category',
               val: `${summary.categoryBreakdown[0].icon} ${summary.categoryBreakdown[0].category}`
             },
-            {
-              icon: '💰', label: 'Avg Transaction',
-              val: format(summary.avgTransaction || 0)
-            },
+            { icon: '💰', label: 'Avg Transaction', val: format(summary.avgTransaction || 0) },
             {
               icon: '🎯', label: 'Budget Health',
               val: !totalBudgeted ? '—' : budgetPct <= 75 ? '✅ Good' : budgetPct <= 90 ? '⚠️ Fair' : '🔴 Critical'
             },
-            {
-              icon: '📅', label: 'Active Days',
-              val: new Set(expenses.map(e => e.date?.slice(0, 10))).size
-            },
-            // ── Salary stat (only if set) ──
-            ...(hasSalary && savingsInfo ? [{
-              icon: savingsInfo.isOver ? '🔴' : '🏦',
-              label: 'Salary Used',
-              val: `${savingsInfo.spentPct}% spent`
-            }] : []),
+            { icon: '📅', label: 'Active Days', val: new Set(expenses.map(e => e.date?.slice(0, 10))).size },
+            ...(hasSalary && savingsInfo ? [{ icon: savingsInfo.isOver ? '🔴' : '🏦', label: 'Salary Used', val: `${savingsInfo.spentPct}% spent` }] : []),
+            ...(dueItems.length > 0 ? [{ icon: '🔄', label: 'Recurring Due', val: `${dueItems.length} pending` }] : []),
           ].map(({ icon, label, val }) => (
             <div className="col-6 col-md-3" key={label}>
               <div className="card ef-card ef-stat-card text-center py-3">
