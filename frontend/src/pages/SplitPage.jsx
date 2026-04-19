@@ -96,7 +96,7 @@ function SplitFormModal({ categories, onClose, onSubmit, loading }) {
 
   const validate1 = () => {
     const e = {};
-    if (!form.category)                         e.category    = 'Category select karo';
+    if (!form.category)                         e.category = 'Please select a category';
     if (!form.title.trim())                     e.title       = 'Title dalo';
     if (!form.totalAmount || +form.totalAmount <= 0) e.totalAmount = 'Valid amount dalo';
     setErrors(e);
@@ -109,10 +109,10 @@ function SplitFormModal({ categories, onClose, onSubmit, loading }) {
     if (emptyNames.length) { e.participants = 'Sabka naam bharo'; }
     if (splitType === 'custom') {
       const diff = Math.abs(totalCustom - parseFloat(form.totalAmount));
-      if (diff > 1) e.amounts = `Total ₹${totalCustom.toFixed(0)} hai, ₹${parseFloat(form.totalAmount).toFixed(0)} hona chahiye`;
+      if (diff > 1) e.amounts = `Total ₹${totalCustom.toFixed(0)} must equal ₹${parseFloat(form.totalAmount).toFixed(0)}`;
     }
     if (splitType === 'percentage') {
-      if (Math.abs(totalPct - 100) > 0.5) e.pct = `Total ${totalPct.toFixed(0)}% hai, 100% hona chahiye`;
+      if (Math.abs(totalPct - 100) > 0.5) e.pct = `Percentages must total 100% (currently ${totalPct.toFixed(0)}%)`;
     }
     setErrors(e);
     return !Object.keys(e).length;
@@ -246,7 +246,7 @@ function SplitFormModal({ categories, onClose, onSubmit, loading }) {
                 <div style={{ marginBottom: 8 }}>
                   <span style={lbl}>Notes <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, fontSize: 12 }}>(optional)</span></span>
                   <textarea className="form-control" style={{ borderRadius: 10, fontSize: 13 }}
-                    rows={2} placeholder="Koi extra detail…"
+                    rows={2} placeholder="Any extra details…"
                     value={form.notes}
                     onChange={e => setForm(p => ({ ...p, notes: e.target.value }))} />
                 </div>
@@ -779,7 +779,7 @@ export default function SplitPage() {
       {loading ? (
         <div className="text-center py-5">
           <div className="spinner-border text-primary" style={{ width: 40, height: 40 }} />
-          <p className="text-muted mt-3">Load ho raha hai…</p>
+          <p className="text-muted mt-3">Loading…</p>
         </div>
       ) : splits.length === 0 ? (
         <div style={{
@@ -788,20 +788,20 @@ export default function SplitPage() {
           border: '0.5px solid var(--bs-border-color)', borderRadius: 16,
         }}>
           <div style={{ fontSize: 56, marginBottom: 16 }}>✂️</div>
-          <h5 style={{ fontWeight: 700, marginBottom: 8 }}>Koi split expense nahi</h5>
+          <h5 style={{ fontWeight: 700, marginBottom: 8 }}>No split expenses yet</h5>
           <p className="text-muted" style={{ maxWidth: 320, margin: '0 auto 20px' }}>
-            Dinner, trip, hotel — bill split karo friends ke saath aur track karo kisne kitna dena hai
+            Dinner, trip, hotel — split bills with friends and track who owes what
           </p>
           <button className="btn ef-btn-primary"
             style={{ borderRadius: 10, padding: '10px 24px' }}
             onClick={() => setShowForm(true)}>
-            <i className="bi bi-scissors me-2" />Pehla Split Banao
+            <i className="bi bi-scissors me-2" />Create First Split
           </button>
         </div>
       ) : filteredSplits.length === 0 ? (
         <div className="text-center py-5 text-muted">
           <i className="bi bi-filter-circle fs-2 d-block mb-2" />
-          Is filter mein koi split nahi
+          No splits in this filter
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>

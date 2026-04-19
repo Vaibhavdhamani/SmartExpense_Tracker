@@ -17,14 +17,18 @@ app.use((req, res, next) => {
   });
 });
 
-app.use('/api/auth',       require('./routes/authRoutes'));
-app.use('/api/categories', require('./routes/categoryRoutes'));
-app.use('/api/expenses',   require('./routes/expenseRoutes'));
-app.use('/api/budgets',    require('./routes/budgetRoutes'));
-app.use('/api/users',      require('./routes/userRoutes'));
-app.use('/api/recurring',  require('./routes/recurringRoutes'));
-app.use('/api/goals',      require('./routes/goalRoutes'));
-app.use('/api/splits',     require('./routes/splitRoutes'));     // ← NEW
+app.use('/api/auth',          require('./routes/authRoutes'));
+app.use('/api/categories',    require('./routes/categoryRoutes'));
+app.use('/api/expenses',      require('./routes/expenseRoutes'));
+app.use('/api/budgets',       require('./routes/budgetRoutes'));
+app.use('/api/users',         require('./routes/userRoutes'));
+app.use('/api/recurring',     require('./routes/recurringRoutes'));
+app.use('/api/goals',         require('./routes/goalRoutes'));
+app.use('/api/splits',        require('./routes/splitRoutes'));
+app.use('/api/subscriptions', require('./routes/subscriptionRoutes'));
+app.use('/api/ai',            require('./routes/aiRoutes'));
+app.use('/api/reports',       require('./routes/reportRoutes'));
+app.use('/api/admin',         require('./routes/adminRoutes'));   // ← ADMIN
 
 app.get('/api/health', (req, res) =>
   res.json({ status: 'ok', service: 'expenseflow-backend' })

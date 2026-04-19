@@ -4,16 +4,22 @@ import { useAuth }      from '../../context/AuthContext';
 import { useRecurring } from '../../hooks/useRecurring';
 import QuickAddFAB      from '../expenses/QuickAddFAB';
 
-const NAV = [
-  { to: '/dashboard',   icon: 'bi-grid-1x2-fill',  label: 'Dashboard'   },
-  { to: '/expenses',    icon: 'bi-receipt-cutoff',  label: 'Expenses'    },
-  { to: '/budgets',     icon: 'bi-bullseye',        label: 'Budgets'     },
-  { to: '/recurring',   icon: 'bi-arrow-repeat',    label: 'Recurring'   },
-  { to: '/goals',       icon: 'bi-trophy-fill',     label: 'Goals'       },
-  { to: '/split',       icon: 'bi-scissors',        label: 'Split'       },
-  { to: '/predictions', icon: 'bi-graph-up-arrow',  label: 'Predictions' },
-  { to: '/settings',    icon: 'bi-gear-fill',       label: 'Settings'    },
+const BASE_NAV = [
+  { to: '/dashboard',     icon: 'bi-grid-1x2-fill',   label: 'Dashboard'     },
+  { to: '/expenses',      icon: 'bi-receipt-cutoff',   label: 'Expenses'      },
+  { to: '/budgets',       icon: 'bi-bullseye',         label: 'Budgets'       },
+  { to: '/recurring',     icon: 'bi-arrow-repeat',     label: 'Recurring'     },
+  { to: '/goals',         icon: 'bi-trophy-fill',      label: 'Goals'         },
+  { to: '/split',         icon: 'bi-scissors',         label: 'Split'         },
+  { to: '/subscriptions', icon: 'bi-collection-fill',  label: 'Subscriptions' },
+  { to: '/ai-insights',   icon: 'bi-stars',            label: 'AI Insights'   },
+  { to: '/analytics',     icon: 'bi-bar-chart-fill',   label: 'Analytics'     },
+  { to: '/predictions',   icon: 'bi-graph-up-arrow',   label: 'Predictions'   },
+  { to: '/emi-calculator', icon: 'bi-calculator-fill', label: 'EMI'           },
+  { to: '/settings',      icon: 'bi-gear-fill',        label: 'Settings'      },
 ];
+// Admin nav item — only visible to admin users
+const ADMIN_NAV = { to: '/admin', icon: 'bi-shield-lock-fill', label: 'Admin Panel' };
 
 function applyTheme(isDark) {
   document.documentElement.setAttribute('data-theme',    isDark ? 'dark' : 'light');
@@ -22,9 +28,14 @@ function applyTheme(isDark) {
 
 export default function MainLayout() {
   const { user, logout } = useAuth();
-  const navigate  = useNavigate();
-  const location  = useLocation();
-  const { dueItems } = useRecurring();
+  const navigate         = useNavigate();
+  const location         = useLocation();
+  const { dueItems }     = useRecurring();
+
+  // Build nav based on role
+  const NAV = user?.role === 'admin'
+    ? [...BASE_NAV, ADMIN_NAV]
+    : BASE_NAV;
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed,   setCollapsed]   = useState(false);
@@ -98,14 +109,16 @@ export default function MainLayout() {
                       {dueItems.length}
                     </span>
                   )}
+                  {to === '/ai-insights' && (
+                    <span className="badge ms-auto" style={{ fontSize: 9, background: 'rgba(99,102,241,0.15)', color: '#6366f1' }}>
+                      NEW
+                    </span>
+                  )}
                 </span>
               )}
               {collapsed && to === '/recurring' && dueItems.length > 0 && (
-                <span style={{
-                  position: 'absolute', top: 4, right: 4,
-                  width: 8, height: 8, borderRadius: '50%',
-                  background: 'var(--bs-warning)',
-                }} />
+                <span style={{ position: 'absolute', top: 4, right: 4, width: 8, height: 8,
+                  borderRadius: '50%', background: 'var(--bs-warning)' }} />
               )}
             </NavLink>
           ))}
@@ -144,11 +157,8 @@ export default function MainLayout() {
               <button className="ef-topbar-icon-btn position-relative"
                 onClick={() => navigate('/recurring')} title={`${dueItems.length} recurring due`}>
                 <i className="bi bi-bell-fill text-warning" />
-                <span style={{
-                  position: 'absolute', top: 2, right: 2,
-                  width: 8, height: 8, borderRadius: '50%',
-                  background: 'var(--bs-danger)',
-                }} />
+                <span style={{ position: 'absolute', top: 2, right: 2, width: 8, height: 8,
+                  borderRadius: '50%', background: 'var(--bs-danger)' }} />
               </button>
             )}
 
@@ -158,8 +168,7 @@ export default function MainLayout() {
             </button>
 
             <div className="ef-avatar-wrapper" ref={avatarRef}>
-              <button
-                className={`ef-avatar-btn ${avatarOpen ? 'ef-avatar-btn--open' : ''}`}
+              <button className={`ef-avatar-btn ${avatarOpen ? 'ef-avatar-btn--open' : ''}`}
                 onClick={() => setAvatarOpen(!avatarOpen)}>
                 <div className="ef-avatar ef-avatar--sm">{user?.username?.[0]?.toUpperCase()}</div>
                 <div className="ef-avatar-info d-none d-md-block">
@@ -179,13 +188,18 @@ export default function MainLayout() {
                   </div>
                   <div className="ef-avatar-dropdown__divider" />
                   {[
-                    { icon: 'bi-grid-1x2-fill', label: 'Dashboard', to: '/dashboard' },
-                    { icon: 'bi-scissors',       label: 'Split',     to: '/split'     },
-                    { icon: 'bi-gear-fill',      label: 'Settings',  to: '/settings'  },
-                  ].map(({ icon, label, to }) => (
+                    { icon: 'bi-shield-lock-fill', label: 'Admin Panel', to: '/admin', adminOnly: true },
+                    { icon: 'bi-grid-1x2-fill',  label: 'Dashboard',  to: '/dashboard'  },
+                    { icon: 'bi-bar-chart-fill',  label: 'Analytics',  to: '/analytics'  },
+                    { icon: 'bi-stars',           label: 'AI Insights',to: '/ai-insights'},
+                    { icon: 'bi-gear-fill',       label: 'Settings',   to: '/settings'   },
+                  ].filter(item => !item.adminOnly || user?.role === 'admin')
+                  .map(({ icon, label, to }) => (
                     <button key={to} className="ef-avatar-dropdown__item"
+                      style={ to === '/admin' ? { color: '#6366f1', fontWeight: 700 } : {} }
                       onClick={() => { setAvatarOpen(false); navigate(to); }}>
                       <i className={`bi ${icon}`} /><span>{label}</span>
+                      {to === '/admin' && <span style={{ fontSize:9, padding:'1px 6px', borderRadius:10, background:'rgba(99,102,241,0.12)', color:'#6366f1', marginLeft:'auto' }}>ADMIN</span>}
                     </button>
                   ))}
                   <button className="ef-avatar-dropdown__item"
@@ -207,7 +221,6 @@ export default function MainLayout() {
 
         <main className="ef-content"><Outlet /></main>
 
-        {/* Mobile bottom nav */}
         <nav className="ef-mobile-nav d-md-none">
           {NAV.map(({ to, icon, label }) => (
             <NavLink key={to} to={to}
@@ -215,11 +228,8 @@ export default function MainLayout() {
               <span className="position-relative d-inline-block">
                 <i className={`bi ${icon}`} />
                 {to === '/recurring' && dueItems.length > 0 && (
-                  <span style={{
-                    position: 'absolute', top: -2, right: -4,
-                    width: 7, height: 7, borderRadius: '50%',
-                    background: 'var(--bs-warning)',
-                  }} />
+                  <span style={{ position: 'absolute', top: -2, right: -4, width: 7, height: 7,
+                    borderRadius: '50%', background: 'var(--bs-warning)' }} />
                 )}
               </span>
               <span>{label}</span>

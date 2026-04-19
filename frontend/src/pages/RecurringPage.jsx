@@ -8,10 +8,10 @@ import api from '../services/api';
 // Constants
 // ─────────────────────────────────────────────────────────────
 const FREQ = [
-  { val: 'daily',   label: 'Daily',   icon: 'bi-sun',            desc: 'Har roz' },
-  { val: 'weekly',  label: 'Weekly',  icon: 'bi-calendar-week',  desc: 'Har hafte' },
-  { val: 'monthly', label: 'Monthly', icon: 'bi-calendar-month', desc: 'Har mahine' },
-  { val: 'yearly',  label: 'Yearly',  icon: 'bi-calendar-event', desc: 'Har saal' },
+  { val: 'daily',   label: 'Daily',   icon: 'bi-sun',            desc: 'Every day' },
+  { val: 'weekly',  label: 'Weekly',  icon: 'bi-calendar-week',  desc: 'Every week' },
+  { val: 'monthly', label: 'Monthly', icon: 'bi-calendar-month', desc: 'Every month' },
+  { val: 'yearly',  label: 'Yearly',  icon: 'bi-calendar-event', desc: 'Every year' },
 ];
 const DAYS_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const DAYS_FULL  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -44,20 +44,20 @@ const S = {
     backdropFilter: 'blur(4px)',
     zIndex: 1049,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    padding: '16px',
+    padding: '8px',
   },
   formBox: {
     width: '100%', maxWidth: 540,
-    maxHeight: '92vh',
+    maxHeight: '95vh',
     display: 'flex', flexDirection: 'column',
     background: 'var(--bs-body-bg)',
-    borderRadius: 20,
+    borderRadius: 16,
     border: '0.5px solid var(--bs-border-color)',
     boxShadow: '0 24px 60px rgba(0,0,0,0.22)',
     overflow: 'hidden',
   },
   formHeader: {
-    padding: '20px 24px 16px',
+    padding: '16px 18px 12px',
     borderBottom: '0.5px solid var(--bs-border-color)',
     flexShrink: 0,
     background: 'var(--bs-body-bg)',
@@ -65,12 +65,12 @@ const S = {
   formBody: {
     overflowY: 'auto',
     flex: 1,
-    padding: '20px 24px',
+    padding: '14px 18px',
   },
   formFooter: {
-    padding: '14px 24px',
+    padding: '10px 18px',
     borderTop: '0.5px solid var(--bs-border-color)',
-    display: 'flex', justifyContent: 'flex-end', gap: 10,
+    display: 'flex', justifyContent: 'flex-end', gap: 8,
     flexShrink: 0,
     background: 'var(--bs-body-bg)',
   },
@@ -287,7 +287,7 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
   const validateStep1 = () => {
     const e = {};
     const desc = form.description === '__custom__' ? customDesc : form.description;
-    if (!form.category)                    e.category    = 'Category select karo';
+    if (!form.category)                    e.category    = 'Please select a category';
     if (!form.amount || +form.amount <= 0) e.amount      = 'Valid amount dalo';
     if (!desc.trim())                      e.description = 'Description dalo';
     setErrors(e);
@@ -330,7 +330,7 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
                 {isEdit ? 'Edit Recurring Expense' : 'New Recurring Expense'}
               </h5>
               <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--bs-secondary-color)' }}>
-                {step === 1 ? 'Step 1 of 2 — Expense details' : 'Step 2 of 2 — Schedule set karo'}
+                {step === 1 ? 'Step 1 of 2 — Expense details' : 'Step 2 of 2 — Set schedule'}
               </p>
             </div>
             <button
@@ -459,8 +459,8 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
                 <FreqPicker value={form.frequency} onChange={v => set('frequency', v)} />
 
                 <div style={{ ...S.sectionDivider, marginTop: 24 }}>
-                  {form.frequency === 'monthly' ? 'Date select karo' :
-                   form.frequency === 'weekly'  ? 'Din select karo'  :
+                  {form.frequency === 'monthly' ? 'Select date' :
+                   form.frequency === 'weekly'  ? 'Select day'  :
                    form.frequency === 'daily'   ? 'Daily schedule'   : 'Yearly reminder'}
                 </div>
 
@@ -473,7 +473,7 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
                     fontSize: 13, color: 'var(--bs-body-color)',
                   }}>
                     <i className="bi bi-info-circle me-2 text-primary" />
-                    Har roz reminder aayega aur expense add hoga.
+                    A reminder will be sent every day.
                   </div>
                 )}
 
@@ -485,7 +485,7 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
                     fontSize: 13, color: 'var(--bs-body-color)',
                   }}>
                     <i className="bi bi-info-circle me-2 text-primary" />
-                    Ek saal baad reminder aayega.
+                    A reminder will be sent once a year.
                   </div>
                 )}
 
@@ -517,7 +517,7 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
                     </div>
                     <div style={{ fontSize: 12, color: 'var(--bs-secondary-color)', marginTop: 10 }}>
                       <i className="bi bi-clock me-1" />
-                      Har <strong>{DAYS_FULL[form.dayOfWeek]}</strong> ko reminder aayega
+                      Reminder every <strong>{DAYS_FULL[form.dayOfWeek]}</strong>
                     </div>
                   </div>
                 )}
@@ -528,13 +528,13 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
                     <div style={{
                       display: 'grid',
                       gridTemplateColumns: 'repeat(7, 1fr)',
-                      gap: 4, marginBottom: 4,
+                      gap: 3, marginBottom: 3,
                     }}>
                       {['S','M','T','W','T','F','S'].map((d, i) => (
                         <div key={i} style={{
-                          textAlign: 'center', fontSize: 11,
+                          textAlign: 'center', fontSize: 10,
                           fontWeight: 700, color: 'var(--bs-secondary-color)',
-                          paddingBottom: 4,
+                          paddingBottom: 3,
                         }}>{d}</div>
                       ))}
                     </div>
@@ -542,7 +542,7 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
                     <div style={{
                       display: 'grid',
                       gridTemplateColumns: 'repeat(7, 1fr)',
-                      gap: 4,
+                      gap: 3,
                     }}>
                       {/* 2 empty offset cells */}
                       <div /><div />
@@ -554,7 +554,7 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
                             setForm(p => ({ ...p, dayOfMonth: d }));
                           }}
                           style={{
-                            height: 34, borderRadius: 8,
+                            height: 30, borderRadius: 6,
                             border: form.dayOfMonth === d
                               ? '2px solid var(--bs-primary)'
                               : '1px solid var(--bs-border-color)',
@@ -563,16 +563,16 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
                             color: form.dayOfMonth === d
                               ? '#fff' : 'var(--bs-secondary-color)',
                             cursor: 'pointer', transition: 'all .12s',
-                            fontSize: 12, fontWeight: form.dayOfMonth === d ? 700 : 400,
+                            fontSize: 11, fontWeight: form.dayOfMonth === d ? 700 : 400,
                           }}
                         >
                           {d}
                         </button>
                       ))}
                     </div>
-                    <div style={{ fontSize: 12, color: 'var(--bs-secondary-color)', marginTop: 10 }}>
+                    <div style={{ fontSize: 12, color: 'var(--bs-secondary-color)', marginTop: 8 }}>
                       <i className="bi bi-calendar-check me-1 text-primary" />
-                      Har mahine <strong>{form.dayOfMonth}</strong> tarikh ko reminder aayega
+                      Reminder on day <strong>{form.dayOfMonth}</strong> every month
                     </div>
                   </div>
                 )}
@@ -589,11 +589,11 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
                   </div>
                   <div style={{ fontSize: 14, color: 'var(--bs-body-color)', fontWeight: 500 }}>
                     {form.frequency === 'monthly' &&
-                      `Har mahine ${form.dayOfMonth} tarikh ko reminder aayega`}
+                      `Reminder on day ${form.dayOfMonth} every month`}
                     {form.frequency === 'weekly' &&
-                      `Har ${DAYS_FULL[form.dayOfWeek]} ko reminder aayega`}
-                    {form.frequency === 'daily' && 'Har roz reminder aayega'}
-                    {form.frequency === 'yearly' && 'Ek saal baad reminder aayega'}
+                      `Reminder every ${DAYS_FULL[form.dayOfWeek]}`}
+                    {form.frequency === 'daily' && 'Reminder every day'}
+                    {form.frequency === 'yearly' && 'Reminder once a year'}
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--bs-secondary-color)', marginTop: 4 }}>
                     Dashboard par notification milegi — confirm ya skip kar sakte ho
@@ -676,7 +676,7 @@ function ConfirmModal({ item, onConfirm, onSkip, onClose, loading }) {
           fontSize: 13, color: 'var(--bs-body-color)',
         }}>
           <i className="bi bi-bell-fill text-warning me-2" />
-          Yeh recurring expense due hai. Aaj ki date mein add karna chahte ho?
+          This recurring expense is due. Would you like to add it for today?
         </div>
 
         <div style={{ display: 'flex', gap: 8 }}>
@@ -806,7 +806,7 @@ function QuickScheduleModal({ item, onClose, onSave, loading }) {
                 fontSize: 11, fontWeight: 700, letterSpacing: '0.07em',
                 textTransform: 'uppercase', color: 'var(--bs-secondary-color)',
                 marginBottom: 10,
-              }}>Kaunsi tarikh?</div>
+              }}>Which date?</div>
               {/* Calendar grid */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 4 }}>
                 {['S','M','T','W','T','F','S'].map((d, i) => (
@@ -838,7 +838,7 @@ function QuickScheduleModal({ item, onClose, onSave, loading }) {
               </div>
               <div style={{ fontSize: 12, color: 'var(--bs-secondary-color)', marginTop: 10 }}>
                 <i className="bi bi-calendar-check me-1 text-primary" />
-                Har mahine <strong>{dayOfMonth}</strong> tarikh ko reminder aayega
+                Reminder on day <strong>{dayOfMonth}</strong> every month
               </div>
             </div>
           )}
@@ -872,7 +872,7 @@ function QuickScheduleModal({ item, onClose, onSave, loading }) {
               </div>
               <div style={{ fontSize: 12, color: 'var(--bs-secondary-color)', marginTop: 10 }}>
                 <i className="bi bi-clock me-1" />
-                Har <strong>{DAYS_FULL[dayOfWeek]}</strong> ko reminder aayega
+                Reminder every <strong>{DAYS_FULL[dayOfWeek]}</strong>
               </div>
             </div>
           )}
@@ -885,7 +885,7 @@ function QuickScheduleModal({ item, onClose, onSave, loading }) {
               fontSize: 13,
             }}>
               <i className="bi bi-info-circle me-2 text-primary" />
-              Har roz reminder aayega.
+              A reminder will be sent every day.
             </div>
           )}
 
@@ -897,7 +897,7 @@ function QuickScheduleModal({ item, onClose, onSave, loading }) {
               fontSize: 13,
             }}>
               <i className="bi bi-info-circle me-2 text-primary" />
-              Ek saal baad reminder aayega.
+              A reminder will be sent once a year.
             </div>
           )}
 
@@ -909,11 +909,11 @@ function QuickScheduleModal({ item, onClose, onSave, loading }) {
             fontSize: 13, fontWeight: 500,
           }}>
             <i className="bi bi-bell me-2 text-primary" />
-            {frequency === 'monthly' && `Har mahine ${dayOfMonth} tarikh`}
-            {frequency === 'weekly'  && `Har ${DAYS_FULL[dayOfWeek]}`}
-            {frequency === 'daily'   && 'Har roz'}
-            {frequency === 'yearly'  && 'Ek saal mein ek baar'}
-            {' '}ko reminder aayega
+            {frequency === 'monthly' && `Every month — day ${dayOfMonth}`}
+            {frequency === 'weekly'  && `Every ${DAYS_FULL[dayOfWeek]}`}
+            {frequency === 'daily'   && 'Every day'}
+            {frequency === 'yearly'  && 'Once a year'}
+            {' '}reminder
           </div>
         </div>
 
@@ -970,7 +970,7 @@ function RecurringCard({ item, isDue, onEdit, onEditSchedule, onDelete, onConfir
             type="checkbox"
             checked={item.isActive}
             onChange={() => onToggle(item)}
-            title={item.isActive ? 'Pause karo' : 'Resume karo'}
+            title={item.isActive ? 'Pause' : 'Resume'}
           />
         </div>
       </div>
@@ -995,7 +995,7 @@ function RecurringCard({ item, isDue, onEdit, onEditSchedule, onDelete, onConfir
         }}>
           <i className={`bi ${freq?.icon}`} style={{ fontSize: 12 }} />
           {freq?.label}
-          {item.frequency === 'monthly' && ` · ${item.dayOfMonth} tarikh`}
+          {item.frequency === 'monthly' && ` · Day ${item.dayOfMonth}`}
           {item.frequency === 'weekly'  && ` · ${DAYS_SHORT[item.dayOfWeek]}`}
         </span>
 
@@ -1043,32 +1043,32 @@ function RecurringCard({ item, isDue, onEdit, onEditSchedule, onDelete, onConfir
       <div style={{
         marginTop: 'auto', paddingTop: 12,
         borderTop: '0.5px solid var(--bs-border-color)',
-        display: 'flex', gap: 8, flexWrap: 'wrap',
+        display: 'grid',
+        gridTemplateColumns: isDue ? '1fr auto auto auto' : '1fr auto auto',
+        gap: 6,
       }}>
         {isDue && (
           <button
             className="btn btn-sm ef-btn-primary"
-            style={{ flex: 1, borderRadius: 8 }}
+            style={{ borderRadius: 8, gridColumn: 1 }}
             onClick={() => onConfirm(item)}
           >
-            <i className="bi bi-plus-lg me-1" />Add Now
+            <i className="bi bi-check-lg me-1" />Confirm
           </button>
         )}
-        {/* Edit Schedule — opens quick date modal */}
         <button
           className="btn btn-sm btn-outline-primary"
-          style={{ borderRadius: 8, flex: isDue ? 'none' : 1 }}
+          style={{ borderRadius: 8 }}
           onClick={() => onEditSchedule(item)}
-          title="Schedule change karo"
+          title="Edit schedule"
         >
-          <i className="bi bi-calendar3 me-1" />
-          Schedule
+          <i className="bi bi-calendar3" />
         </button>
         <button
           className="btn btn-sm btn-outline-secondary"
           style={{ borderRadius: 8 }}
           onClick={() => onEdit(item)}
-          title="Edit all details"
+          title="Edit details"
         >
           <i className="bi bi-pencil" />
         </button>
@@ -1235,7 +1235,7 @@ export default function RecurringPage() {
             display: 'flex', alignItems: 'center', gap: 8,
           }}>
             <i className="bi bi-bell-fill text-warning" />
-            <strong style={{ fontSize: 14 }}>Due Now — Confirm karo ya skip karo</strong>
+            <strong style={{ fontSize: 14 }}>Due Now — Confirm or skip</strong>
             <span style={{
               marginLeft: 4,
               background: '#f59e0b', color: '#fff',
@@ -1248,8 +1248,9 @@ export default function RecurringPage() {
             <div
               key={item._id}
               style={{
-                display: 'flex', alignItems: 'center', gap: 14,
-                padding: '14px 20px',
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '12px 16px',
+                flexWrap: 'wrap',
                 borderBottom: idx < dueItems.length - 1
                   ? '0.5px solid rgba(245,158,11,0.15)' : 'none',
               }}
@@ -1257,7 +1258,7 @@ export default function RecurringPage() {
               <div style={S.iconBubble(item.category?.color || '#f59e0b')}>
                 {item.category?.icon}
               </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ flex: 1, minWidth: 120 }}>
                 <div style={{ fontWeight: 700, fontSize: 14 }} className="text-truncate">
                   {item.description}
                 </div>
@@ -1268,16 +1269,16 @@ export default function RecurringPage() {
                   </span>
                 </div>
               </div>
-              <div style={{ fontWeight: 800, fontSize: 16, flexShrink: 0 }}>
+              <div style={{ fontWeight: 800, fontSize: 15, flexShrink: 0 }}>
                 ₹{item.amount?.toLocaleString('en-IN')}
               </div>
-              <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+              <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                 <button
                   className="btn btn-sm ef-btn-primary"
                   style={{ borderRadius: 8 }}
                   onClick={() => setConfirming(item)}
                 >
-                  <i className="bi bi-plus-lg me-1" />Add
+                  <i className="bi bi-check-lg me-1" />Confirm
                 </button>
                 <button
                   className="btn btn-sm btn-outline-secondary"
@@ -1327,7 +1328,7 @@ export default function RecurringPage() {
       {loading ? (
         <div className="text-center py-5">
           <div className="spinner-border text-primary" style={{ width: 40, height: 40 }} />
-          <p className="text-muted mt-3">Load ho raha hai…</p>
+          <p className="text-muted mt-3">Loading…</p>
         </div>
       ) : items.length === 0 ? (
         <div style={{
@@ -1337,22 +1338,22 @@ export default function RecurringPage() {
           borderRadius: 16,
         }}>
           <div style={{ fontSize: 56, marginBottom: 16 }}>🔁</div>
-          <h5 style={{ fontWeight: 700, marginBottom: 8 }}>Koi recurring expense nahi</h5>
+          <h5 style={{ fontWeight: 700, marginBottom: 8 }}>No recurring expenses yet</h5>
           <p className="text-muted" style={{ maxWidth: 300, margin: '0 auto 20px' }}>
-            Rent, EMI, subscriptions — ek baar set karo, reminder automatic aayega
+            Set rent, EMI, subscriptions once — get automatic reminders
           </p>
           <button
             className="btn ef-btn-primary"
             style={{ borderRadius: 10, padding: '10px 24px' }}
             onClick={() => setShowForm(true)}
           >
-            <i className="bi bi-plus-lg me-2" />Pehla Recurring Add Karo
+            <i className="bi bi-plus-lg me-2" />Add First Recurring
           </button>
         </div>
       ) : filteredItems.length === 0 ? (
         <div className="text-center py-5 text-muted">
           <i className="bi bi-filter-circle fs-2 d-block mb-2" />
-          Is filter mein koi item nahi
+          No items in this filter
         </div>
       ) : (
         <div className="row g-3">

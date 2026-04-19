@@ -112,7 +112,7 @@ function GoalFormModal({ goal, onClose, onSubmit, loading }) {
               {isEdit ? 'Edit Goal' : 'New Savings Goal'}
             </h5>
             <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--bs-secondary-color)' }}>
-              {isEdit ? 'Goal details update karo' : 'Financial target set karo'}
+              {isEdit ? 'Update goal details' : 'Set your financial target'}
             </p>
           </div>
           <button onClick={onClose} style={{
@@ -305,7 +305,7 @@ function TransactionModal({ goal, mode, onClose, onSubmit, loading }) {
           }}>{goal.icon}</div>
           <div>
             <div style={{ fontWeight: 700, fontSize: 15 }}>
-              {isDeposit ? 'Paise Add Karo' : 'Paise Nikalo'}
+              {isDeposit ? 'Add Money' : 'Withdraw Money'}
             </div>
             <div style={{ fontSize: 12, color: 'var(--bs-secondary-color)' }}>{goal.title}</div>
           </div>
@@ -322,7 +322,7 @@ function TransactionModal({ goal, mode, onClose, onSubmit, loading }) {
             background: 'var(--bs-secondary-bg, rgba(0,0,0,0.04))',
             display: 'flex', justifyContent: 'space-between', fontSize: 13,
           }}>
-            <span className="text-muted">Abhi saved</span>
+            <span className="text-muted">Saved so far</span>
             <span style={{ fontWeight: 700 }}>₹{goal.savedAmount?.toLocaleString('en-IN')}</span>
             <span className="text-muted">of ₹{goal.targetAmount?.toLocaleString('en-IN')}</span>
           </div>
@@ -387,7 +387,7 @@ function TransactionModal({ goal, mode, onClose, onSubmit, loading }) {
               {loading
                 ? <span className="spinner-border spinner-border-sm" />
                 : <><i className={`bi ${isDeposit ? 'bi-plus-lg' : 'bi-dash-lg'} me-1`} />
-                  {isDeposit ? 'Add Karo' : 'Nikalo'}</>}
+                  {isDeposit ? 'Add Money' : 'Withdraw'}</>}
             </button>
           </div>
         </form>
@@ -493,7 +493,7 @@ function GoalCard({ goal, onEdit, onDelete, onDeposit, onWithdraw }) {
             fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 20,
             background: 'rgba(239,68,68,0.1)', color: '#ef4444',
           }}>
-            ₹{(goal.targetAmount - goal.savedAmount).toLocaleString('en-IN')} baki
+            ₹{(goal.targetAmount - goal.savedAmount).toLocaleString('en-IN')} remaining
           </span>
         )}
         {dl !== null && (
@@ -503,7 +503,7 @@ function GoalCard({ goal, onEdit, onDelete, onDeposit, onWithdraw }) {
             color:      dl < 0 ? '#ef4444'              : dl < 30 ? '#d97706'              : '#6366f1',
           }}>
             <i className="bi bi-calendar3 me-1" style={{ fontSize: 10 }} />
-            {dl < 0 ? `${Math.abs(dl)}d overdue` : dl === 0 ? 'Aaj deadline' : `${dl}d baki`}
+            {dl < 0 ? `${Math.abs(dl)}d overdue` : dl === 0 ? 'Due today' : `${dl}d left`}
           </span>
         )}
         {isDone && goal.completedAt && (
@@ -553,7 +553,7 @@ function GoalCard({ goal, onEdit, onDelete, onDeposit, onWithdraw }) {
           textAlign: 'center', fontSize: 13,
           color: '#22c55e', fontWeight: 600,
         }}>
-          🎉 Goal Complete Ho Gaya!
+          🎉 Goal Completed!
         </div>
       )}
     </div>
@@ -704,7 +704,7 @@ export default function GoalsPage() {
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 700, fontSize: 14 }}>Salary se goal track</div>
             <div style={{ fontSize: 13, color: 'var(--bs-secondary-color)' }}>
-              Salary ₹{salary?.toLocaleString('en-IN')}/month — sabhi goals complete karne ke liye
+              Salary ₹{salary?.toLocaleString('en-IN')}/month — to complete all goals you need
               {' '}<strong style={{ color: '#6366f1' }}>₹{activeMonthlySavings?.toLocaleString('en-IN')}/month</strong> save karna hoga
             </div>
           </div>
@@ -714,7 +714,7 @@ export default function GoalsPage() {
             color: activeMonthlySavings <= salary * 0.3 ? '#16a34a' : '#ef4444',
             fontSize: 12, fontWeight: 700,
           }}>
-            {activeMonthlySavings <= salary * 0.3 ? '✅ Achievable' : '⚠️ Tough — goals kam karo'}
+            {activeMonthlySavings <= salary * 0.3 ? '✅ Achievable' : '⚠️ Tough — reduce goals'}
           </div>
         </div>
       )}
@@ -745,7 +745,7 @@ export default function GoalsPage() {
       {loading ? (
         <div className="text-center py-5">
           <div className="spinner-border text-primary" style={{ width: 40, height: 40 }} />
-          <p className="text-muted mt-3">Load ho raha hai…</p>
+          <p className="text-muted mt-3">Loading…</p>
         </div>
       ) : goals.length === 0 ? (
         <div style={{
@@ -754,22 +754,22 @@ export default function GoalsPage() {
           border: '0.5px solid var(--bs-border-color)', borderRadius: 16,
         }}>
           <div style={{ fontSize: 56, marginBottom: 16 }}>🎯</div>
-          <h5 style={{ fontWeight: 700, marginBottom: 8 }}>Koi savings goal nahi</h5>
+          <h5 style={{ fontWeight: 700, marginBottom: 8 }}>No savings goals yet</h5>
           <p className="text-muted" style={{ maxWidth: 320, margin: '0 auto 20px' }}>
-            Emergency fund, vacation, gadget — pehla goal set karo aur savings track karo
+            Emergency fund, vacation, gadget — set your first goal and track your savings
           </p>
           <button
             className="btn ef-btn-primary"
             style={{ borderRadius: 10, padding: '10px 24px' }}
             onClick={() => setShowForm(true)}
           >
-            <i className="bi bi-plus-lg me-2" />Pehla Goal Banao
+            <i className="bi bi-plus-lg me-2" />Create First Goal
           </button>
         </div>
       ) : filteredGoals.length === 0 ? (
         <div className="text-center py-5 text-muted">
           <i className="bi bi-filter-circle fs-2 d-block mb-2" />
-          Is filter mein koi goal nahi
+          No goals in this filter
         </div>
       ) : (
         <div className="row g-3">
