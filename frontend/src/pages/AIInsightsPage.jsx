@@ -5,7 +5,7 @@ import { useSalary }   from '../hooks/useSalary';
 const getToken = () => localStorage.getItem('ef_token');
 
 async function fetchSuggestions(days) {
-  const res  = await fetch('/api/ai/suggestions', {
+  const res  = await fetch(`${process.env.REACT_APP_API_URL}/api/ai/suggestions`, {
     method: 'POST',
     headers: { 'Content-Type':'application/json', 'Authorization':`Bearer ${getToken()}` },
     body: JSON.stringify({ days }),

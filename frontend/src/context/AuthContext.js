@@ -8,7 +8,7 @@ export function AuthProvider({ children }) {
 
   const fetchMe = useCallback(async (token) => {
     try {
-      const res  = await fetch('/api/auth/me', {
+      const res  = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const json = await res.json();
@@ -36,7 +36,7 @@ export function AuthProvider({ children }) {
   }, [fetchMe]);
 
   const login = useCallback(async (email, password) => {
-    const res  = await fetch('/api/auth/login', {
+    const res  = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ email, password }),
@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const register = useCallback(async (username, email, password) => {
-    const res  = await fetch('/api/auth/register', {
+    const res  = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/register`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ username, email, password }),

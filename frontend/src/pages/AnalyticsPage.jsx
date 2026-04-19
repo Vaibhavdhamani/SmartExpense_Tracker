@@ -301,7 +301,7 @@ export default function AnalyticsPage() {
     setLoading(true); setError('');
     try {
       const p   = new URLSearchParams({ period, year, month });
-      const res = await fetch(`/api/reports/analytics?${p}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/analytics?${p}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       const j = await res.json();
@@ -317,7 +317,7 @@ export default function AnalyticsPage() {
     setDownloading(type);
     try {
       const p   = new URLSearchParams({ period, year, month });
-      const res = await fetch(`/api/reports/${type}?${p}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reports/${type}?${p}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (!res.ok) throw new Error('Download failed');

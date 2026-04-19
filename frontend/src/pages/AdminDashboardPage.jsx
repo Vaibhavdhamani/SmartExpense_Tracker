@@ -6,7 +6,7 @@ import { useCurrency } from '../hooks/useCurrency';
 const getToken = () => localStorage.getItem('ef_token');
 
 const api = async (path, opts = {}) => {
-  const res = await fetch(`/api/admin${path}`, {
+  const res = await fetch(`${process.env.REACT_APP_API_URL}/api/admin${path}`, {
     ...opts,
     headers: {
       'Content-Type': 'application/json',

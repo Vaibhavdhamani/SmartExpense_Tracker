@@ -8,6 +8,8 @@ export function useSplit() {
   const [loading,    setLoading]    = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  const BASE_URL = process.env.REACT_APP_API_URL;
+
   const getToken = () => localStorage.getItem('ef_token');
 
   const apiFetch = async (method, path, body) => {
@@ -19,7 +21,7 @@ export function useSplit() {
       },
     };
     if (body) opts.body = JSON.stringify(body);
-    const res  = await fetch(`/api${path}`, opts);
+    const res  = await fetch(`${BASE_URL}/api${path}`, opts);
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
     return data;

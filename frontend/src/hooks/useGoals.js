@@ -9,6 +9,7 @@ export function useGoals() {
   const [submitting,setSubmitting]= useState(false);
 
   const getToken = () => localStorage.getItem('ef_token');
+  const BASE_URL = process.env.REACT_APP_API_URL;
 
   const apiFetch = async (method, path, body) => {
     const opts = {
@@ -19,7 +20,7 @@ export function useGoals() {
       },
     };
     if (body) opts.body = JSON.stringify(body);
-    const res  = await fetch(`/api${path}`, opts);
+    const res  = await fetch(`${BASE_URL}/api${path}`, opts);
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
     return data;

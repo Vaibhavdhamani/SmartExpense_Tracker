@@ -8,6 +8,8 @@ export function useRecurring() {
   const [loading,    setLoading]    = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  const BASE_URL = process.env.REACT_APP_API_URL;
+
   // ── Raw fetch — bypass axios to avoid any serialization issues ──────────────
   const getToken = () => localStorage.getItem('ef_token');
 
@@ -32,7 +34,7 @@ export function useRecurring() {
       });
       opts.body = JSON.stringify(clean);
     }
-    const res  = await fetch(`/api${path}`, opts);
+    const res  = await fetch(`${BASE_URL}/api${path}`, opts);
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
     return data;
