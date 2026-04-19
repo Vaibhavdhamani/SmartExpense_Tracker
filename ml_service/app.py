@@ -222,7 +222,9 @@ def predict_spending(expenses: list) -> tuple:
 # ─────────────────────────────────────────────────────────────────────────────
 # Routes
 # ─────────────────────────────────────────────────────────────────────────────
-
+@app.route("/")
+def home():
+    return "ML Service Running 🚀"
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
