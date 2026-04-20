@@ -52,7 +52,8 @@ app.get('/api/health', (req, res) =>
   res.json({ status:'ok', service:'expenseflow-backend' })
 );
 
-const sendEmail = require('./services/emailService');
+// const sendEmail = require('./services/emailService');
+const { sendEmail } = require('./services/emailService');
 
 app.get("/test-email", async (req, res) => {
   try {
