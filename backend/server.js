@@ -8,11 +8,17 @@ dotenv.config();
 const app = express();
 connectDB();
 
+// app.use(cors({
+//   origin: "https://smart-expense-tracker-sigma-sable.vercel.app",
+//   credentials: true
+// }));
 app.use(cors({
-  origin: "https://smart-expense-tracker-sigma-sable.vercel.app",
+  origin: [
+    "https://expensetrack.tech",
+    "https://www.expensetrack.tech"
+  ],
   credentials: true
 }));
-
 app.use((req, res, next) => {
   express.json()(req, res, (err) => {
     if (err) return res.status(400).json({ success: false, error: 'Invalid JSON' });
