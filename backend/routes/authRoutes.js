@@ -1,9 +1,12 @@
+/**
+ * ExpenseFlow — Auth Routes (with Welcome Email)
+ */
 const router  = require('express').Router();
 const jwt     = require('jsonwebtoken');
 const User    = require('../models/User');
 const { protect } = require('../middleware/auth');
+const { sendWelcome } = require('../services/emailService');
 
-// Generate JWT — includes role in payload
 const makeToken = (user) => jwt.sign(
   { id: user._id, role: user.role },
   process.env.JWT_SECRET,
@@ -16,17 +19,14 @@ router.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
     if (!username || !email || !password)
       return res.status(400).json({ success: false, error: 'All fields required' });
-
     if (await User.findOne({ email: email.toLowerCase() }))
       return res.status(400).json({ success: false, error: 'Email already registered' });
-
     if (await User.findOne({ username }))
       return res.status(400).json({ success: false, error: 'Username taken' });
 
-    // First ever user becomes admin automatically
+    // First user becomes admin
     const count = await User.countDocuments();
     const role  = count === 0 ? 'admin' : 'user';
-
     const user  = await User.create({ username, email, password, role });
 
     // Auto-seed 12 default categories
@@ -47,18 +47,19 @@ router.post('/register', async (req, res) => {
         { name:'Others',           icon:'📦', color:'#64748B' },
       ];
       await Category.insertMany(defaults.map(d => ({ ...d, user: user._id, isDefault: true })));
-    } catch (_) { /* Category model may vary */ }
+    } catch (_) {}
+
+    // ── Send welcome email (non-blocking) ─────────────────────
+    sendWelcome(user.email, user.username).catch(err =>
+      console.error('[Email] Welcome email failed:', err.message)
+    );
 
     res.status(201).json({
       success: true,
       token: makeToken(user),
       user: {
-        _id:      user._id,
-        username: user.username,
-        email:    user.email,
-        role:     user.role,        // ← INCLUDE ROLE
-        isActive: user.isActive,
-        settings: user.settings,
+        _id: user._id, username: user.username, email: user.email,
+        role: user.role, isActive: user.isActive, settings: user.settings,
       },
     });
   } catch (err) {
@@ -73,14 +74,11 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password)
       return res.status(400).json({ success: false, error: 'Email and password required' });
-
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user)
       return res.status(401).json({ success: false, error: 'Invalid credentials' });
-
     if (!user.isActive)
       return res.status(403).json({ success: false, error: 'Account deactivated. Contact admin.' });
-
     const match = await user.matchPassword(password);
     if (!match)
       return res.status(401).json({ success: false, error: 'Invalid credentials' });
@@ -89,12 +87,8 @@ router.post('/login', async (req, res) => {
       success: true,
       token: makeToken(user),
       user: {
-        _id:      user._id,
-        username: user.username,
-        email:    user.email,
-        role:     user.role,        // ← INCLUDE ROLE
-        isActive: user.isActive,
-        settings: user.settings,
+        _id: user._id, username: user.username, email: user.email,
+        role: user.role, isActive: user.isActive, settings: user.settings,
       },
     });
   } catch (err) {
@@ -104,18 +98,14 @@ router.post('/login', async (req, res) => {
 });
 
 // ── GET /api/auth/me ──────────────────────────────────────────
-router.get('/me', protect, async (req, res) => {
+router.get('/me', protect, (req, res) => {
   const user = req.user;
   res.json({
     success: true,
     user: {
-      _id:      user._id,
-      username: user.username,
-      email:    user.email,
-      role:     user.role,          // ← INCLUDE ROLE
-      isActive: user.isActive,
-      settings: user.settings,
-      createdAt:user.createdAt,
+      _id: user._id, username: user.username, email: user.email,
+      role: user.role, isActive: user.isActive,
+      settings: user.settings, createdAt: user.createdAt,
     },
   });
 });
