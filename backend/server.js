@@ -52,6 +52,22 @@ app.get('/api/health', (req, res) =>
   res.json({ status:'ok', service:'expenseflow-backend' })
 );
 
+const sendEmail = require('./services/emailService');
+
+app.get("/test-email", async (req, res) => {
+  try {
+    await sendEmail({
+      to: "vd150301@gmail.com", // यहाँ अपना email डालो
+      subject: "Test Email",
+      html: "<h1>Email Working ✅</h1>"
+    });
+    res.send("Email sent successfully");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Email failed");
+  }
+});
+
 // Cron jobs
 require('./services/cronJobs');
 
