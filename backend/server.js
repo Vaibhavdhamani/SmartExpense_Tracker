@@ -2,23 +2,15 @@ const express   = require('express');
 const cors      = require('cors');
 const dotenv    = require('dotenv');
 const connectDB = require('./config/db');
-
 dotenv.config();
 
 const app = express();
 connectDB();
 
-// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-app.use(cors({
-  origin: [
-    "https://expensetrack.tech",
-    "https://www.expensetrack.tech"
-  ],
-  credentials: true
-}));
+app.use(cors({ origin: process.env.FRONTEND_URL || 'https://expensetrack.tech', credentials: true }));
 app.use((req, res, next) => {
-  express.json()(req, res, (err) => {
-    if (err) return res.status(400).json({ success: false, error: 'Invalid JSON' });
+  express.json()(req, res, err => {
+    if (err) return res.status(400).json({ success:false, error:'Invalid JSON' });
     next();
   });
 });
@@ -34,19 +26,19 @@ app.use('/api/splits',        require('./routes/splitRoutes'));
 app.use('/api/subscriptions', require('./routes/subscriptionRoutes'));
 app.use('/api/ai',            require('./routes/aiRoutes'));
 app.use('/api/reports',       require('./routes/reportRoutes'));
-app.use('/api/admin',         require('./routes/adminRoutes'));   // ← ADMIN
+app.use('/api/admin',         require('./routes/adminRoutes'));
 
 app.get('/api/health', (req, res) =>
-  res.json({ status: 'ok', service: 'expenseflow-backend' })
+  res.json({ status:'ok', service:'expenseflow-backend' })
 );
 
+// Start cron jobs
 require('./services/cronJobs');
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(err.status || 500).json({ success: false, error: err.message || 'Server Error' });
+  res.status(err.status || 500).json({ success:false, error: err.message || 'Server Error' });
 });
 
-
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
