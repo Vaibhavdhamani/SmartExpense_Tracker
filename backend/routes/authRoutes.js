@@ -3,6 +3,9 @@ const jwt     = require('jsonwebtoken');
 const User    = require('../models/User');
 const { protect } = require('../middleware/auth');
 
+// ✅ NEW: email service import
+const { sendWelcome } = require('../services/emailService');
+
 // Generate JWT — includes role in payload
 const makeToken = (user) => jwt.sign(
   { id: user._id, role: user.role },
@@ -49,6 +52,11 @@ router.post('/register', async (req, res) => {
       await Category.insertMany(defaults.map(d => ({ ...d, user: user._id, isDefault: true })));
     } catch (_) { /* Category model may vary */ }
 
+    // ✅ NEW: Send welcome email (non-blocking)
+    sendWelcome(user.email, user.username).catch(err =>
+      console.error('[Email] Welcome email failed:', err.message)
+    );
+
     res.status(201).json({
       success: true,
       token: makeToken(user),
@@ -56,7 +64,7 @@ router.post('/register', async (req, res) => {
         _id:      user._id,
         username: user.username,
         email:    user.email,
-        role:     user.role,        // ← INCLUDE ROLE
+        role:     user.role,
         isActive: user.isActive,
         settings: user.settings,
       },
@@ -92,7 +100,7 @@ router.post('/login', async (req, res) => {
         _id:      user._id,
         username: user.username,
         email:    user.email,
-        role:     user.role,        // ← INCLUDE ROLE
+        role:     user.role,
         isActive: user.isActive,
         settings: user.settings,
       },
@@ -112,7 +120,7 @@ router.get('/me', protect, async (req, res) => {
       _id:      user._id,
       username: user.username,
       email:    user.email,
-      role:     user.role,          // ← INCLUDE ROLE
+      role:     user.role,
       isActive: user.isActive,
       settings: user.settings,
       createdAt:user.createdAt,
