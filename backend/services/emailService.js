@@ -195,6 +195,7 @@ function subscriptionRenewalHtml(username, subscriptions) {
       <td style="padding:12px 10px;font-size:13px;color:#64748b;text-align:center;">${s.daysLeft} day${s.daysLeft!==1?'s':''}</td>
       <td style="padding:12px 10px;font-size:14px;color:#4F46E5;font-weight:700;text-align:right;">₹${s.amount.toLocaleString('en-IN')}</td>
     </tr>`).join('');
+    
   const content=`
     <h2 style="margin:0 0 6px;color:#1e293b;font-size:22px;font-weight:800;">🔔 Upcoming Renewals</h2>
     <p style="color:#64748b;font-size:15px;margin:0 0 20px;">Hi ${username}, these subscriptions renew soon:</p>
