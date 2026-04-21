@@ -63,8 +63,8 @@ function GoalFormModal({ goal, onClose, onSubmit, loading }) {
 
   const validate = () => {
     const e = {};
-    if (!form.title.trim())                           e.title        = 'Title dalo';
-    if (!form.targetAmount || +form.targetAmount <= 0) e.targetAmount = 'Valid target amount dalo';
+    if (!form.title.trim())                           e.title        = 'Please enter a title';
+    if (!form.targetAmount || +form.targetAmount <= 0) e.targetAmount = 'Please enter a valid target amount';
     setErrors(e);
     return !Object.keys(e).length;
   };
@@ -170,7 +170,7 @@ function GoalFormModal({ goal, onClose, onSubmit, loading }) {
                 className="form-control"
                 style={{ borderRadius: 10, fontSize: 14 }}
                 rows={2}
-                placeholder="Goal ke baare mein kuch likhein…"
+                placeholder="Write something about this goal…"
                 value={form.description}
                 onChange={e => set('description', e.target.value)}
               />
@@ -203,7 +203,7 @@ function GoalFormModal({ goal, onClose, onSubmit, loading }) {
                   onChange={e => set('savedAmount', e.target.value)}
                 />
               </div>
-              <small className="text-muted">Agar pehle se kuch save kar rakha hai toh yahan daalo</small>
+              <small className="text-muted">If you have already saved some amount, enter it here</small>
             </div>
 
             {/* Target date */}
@@ -270,8 +270,8 @@ function TransactionModal({ goal, mode, onClose, onSubmit, loading }) {
 
   const handle = (ev) => {
     ev.preventDefault();
-    if (!amount || +amount <= 0) { setError('Valid amount dalo'); return; }
-    if (+amount > max) { setError(`Maximum ${max.toLocaleString('en-IN')} ₹ ${isDeposit ? 'add' : 'withdraw'} kar sakte ho`); return; }
+    if (!amount || +amount <= 0) { setError('Please enter a valid amount'); return; }
+    if (+amount > max) { setError(`Maximum ₹${max.toLocaleString('en-IN')} can be ${isDeposit ? 'added' : 'withdrawn'}`); return; }
     onSubmit(parseFloat(amount));
   };
 
@@ -606,7 +606,7 @@ export default function GoalsPage() {
   };
 
   const handleDelete = (id) => {
-    if (window.confirm('Is goal ko delete karein?')) deleteGoal(id);
+    if (window.confirm('Are you sure you want to delete this goal?')) deleteGoal(id);
   };
 
   const filteredGoals = goals.filter(g => {
@@ -702,10 +702,10 @@ export default function GoalsPage() {
         }}>
           <div style={{ fontSize: 24 }}>💡</div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 700, fontSize: 14 }}>Salary se goal track</div>
+            <div style={{ fontWeight: 700, fontSize: 14 }}>Goal Progress vs Salary</div>
             <div style={{ fontSize: 13, color: 'var(--bs-secondary-color)' }}>
-              Salary ₹{salary?.toLocaleString('en-IN')}/month — to complete all goals you need
-              {' '}<strong style={{ color: '#6366f1' }}>₹{activeMonthlySavings?.toLocaleString('en-IN')}/month</strong> save karna hoga
+              Your salary is ₹{salary?.toLocaleString('en-IN')}/month — to complete all goals you need to save
+              {' '}<strong style={{ color: '#6366f1' }}>₹{activeMonthlySavings?.toLocaleString('en-IN')}/month</strong>
             </div>
           </div>
           <div style={{
@@ -756,7 +756,7 @@ export default function GoalsPage() {
           <div style={{ fontSize: 56, marginBottom: 16 }}>🎯</div>
           <h5 style={{ fontWeight: 700, marginBottom: 8 }}>No savings goals yet</h5>
           <p className="text-muted" style={{ maxWidth: 320, margin: '0 auto 20px' }}>
-            Emergency fund, vacation, gadget — set your first goal and track your savings
+            Emergency fund, vacation, gadget — set your first goal and start tracking your savings
           </p>
           <button
             className="btn ef-btn-primary"

@@ -685,14 +685,14 @@ function ConfirmModal({ item, onConfirm, onSkip, onClose, loading }) {
             onClick={onClose}
             style={{ flex: 1 }}
           >
-            Baad mein
+            Later
           </button>
           <button
             className="btn btn-outline-warning btn-sm"
             onClick={onSkip}
             style={{ flex: 1 }}
           >
-            <i className="bi bi-skip-forward me-1" />Is baar skip
+            <i className="bi bi-skip-forward me-1" />Skip this time
           </button>
           <button
             className="btn ef-btn-primary btn-sm"
