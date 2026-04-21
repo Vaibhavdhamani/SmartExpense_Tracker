@@ -17,8 +17,10 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 
 app = Flask(__name__)
-CORS(app, origins=["https://smart-expense-tracker-sigma-sable.vercel.app"])
-
+CORS(app, origins=[
+    "https://expensetrack.tech",
+    "https://www.expensetrack.tech"
+])
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Helpers
