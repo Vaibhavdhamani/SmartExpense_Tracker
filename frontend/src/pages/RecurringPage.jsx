@@ -300,6 +300,11 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // ── IMPORTANT: Step 1 pe Enter ya accidental submit block karo ──
+    if (step !== 2) {
+      handleNext();   // sirf next pe jaao, submit mat karo
+      return;
+    }
     if (!validateStep1()) { setStep(1); return; }
     // Strip any accidental surrounding quotes from description
     const rawDesc   = form.description === '__custom__' ? customDesc : form.description;
@@ -596,7 +601,7 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
                     {form.frequency === 'yearly' && 'Reminder once a year'}
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--bs-secondary-color)', marginTop: 4 }}>
-                    Dashboard par notification milegi — confirm ya skip kar sakte ho
+                    You will receive a notification on the dashboard — you can confirm or skip it.
                   </div>
                 </div>
               </>
@@ -685,14 +690,14 @@ function ConfirmModal({ item, onConfirm, onSkip, onClose, loading }) {
             onClick={onClose}
             style={{ flex: 1 }}
           >
-            Later
+            Baad mein
           </button>
           <button
             className="btn btn-outline-warning btn-sm"
             onClick={onSkip}
             style={{ flex: 1 }}
           >
-            <i className="bi bi-skip-forward me-1" />Skip this time
+            <i className="bi bi-skip-forward me-1" />Is baar skip
           </button>
           <button
             className="btn ef-btn-primary btn-sm"
