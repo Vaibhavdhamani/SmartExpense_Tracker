@@ -7,7 +7,7 @@ const cron = require('node-cron');
 const { checkSubscriptionRenewals, sendMonthlyReport, checkEmiDue } = require('./emailTriggers');
 
 // Daily 8:00 AM IST — EMI / Recurring due reminder (3 days before)
-cron.schedule('* * * * *', async () => {
+cron.schedule('0 8 * * *', async () => {
   console.log('[Cron] EMI due check...');
   await checkEmiDue();
 }, { timezone: 'Asia/Kolkata' });
