@@ -152,6 +152,8 @@ body { font-family: 'Sora', sans-serif; background: var(--ef-bg); color: var(--e
   margin-left: var(--ef-sidebar-w);
   flex: 1; display: flex; flex-direction: column;
   min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
   transition: margin-left .25s ease;
 }
 .ef-layout--collapsed .ef-main { margin-left: 64px; }
@@ -256,7 +258,7 @@ body { font-family: 'Sora', sans-serif; background: var(--ef-bg); color: var(--e
 }
 
 /* ── Content ── */
-.ef-content { flex: 1; padding: 24px; background: var(--ef-bg); }
+.ef-content { flex: 1; padding: 24px; background: var(--ef-bg); overflow-y: auto; overflow-x: hidden; }
 .ef-page    { max-width: 1200px; margin: 0 auto; }
 
 /* ── Mobile bottom nav ── */
@@ -312,7 +314,7 @@ body { font-family: 'Sora', sans-serif; background: var(--ef-bg); color: var(--e
 /* ── KPI ── */
 .ef-kpi-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
 .ef-kpi-label { font-size: 12px; margin-top: 8px; color: var(--ef-text-muted); }
-.ef-kpi-value { font-size: 20px; font-weight: 700; display: block; color: var(--ef-text); }
+.ef-kpi-value { font-size: 20px; font-weight: 700; display: block; color: var(--ef-text); word-break: break-all; }
 .ef-kpi-sub   { font-size: 11px; color: var(--ef-text-muted); }
 
 /* ── Stat cards hover ── */
@@ -584,7 +586,10 @@ body { font-family: 'Sora', sans-serif; background: var(--ef-bg); color: var(--e
 .ef-fab-amount-input { border: none; outline: none; background: transparent; font-size: 48px; font-weight: 800; font-family: 'DM Mono', monospace; color: var(--ef-text); width: 180px; text-align: center; }
 .ef-fab-amount-input::placeholder { color: var(--ef-border); }
 .ef-fab-amount-input::-webkit-outer-spin-button, .ef-fab-amount-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-.ef-fab-amount-input[type=number] { -moz-appearance: textfield; }
+input[type=number] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
 
 .ef-fab-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
 .ef-fab-chip { padding: 5px 14px; border-radius: 20px; border: 1.5px solid var(--ef-border); background: var(--ef-bg); color: var(--ef-text); font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; }
@@ -677,6 +682,14 @@ body { font-family: 'Sora', sans-serif; background: var(--ef-bg); color: var(--e
   /* Content padding + bottom nav spacing */
   .ef-content { padding: 16px; padding-bottom: calc(var(--ef-mobile-nav-h) + 80px); }
 
+  /* KPI cards — mobile fix */
+  .ef-kpi-value { font-size: 17px; }
+  .ef-kpi-card .card-body { padding: 12px; }
+  .ef-kpi-icon  { width: 36px; height: 36px; font-size: 16px; }
+  
+  /* Remove h-100 forced equal height on mobile — let cards be natural height */
+  .ef-kpi-card { height: auto !important; }
+
   /* Topbar */
   .ef-topbar { padding: 0 14px; }
   .ef-topbar__title { font-size: 16px; }
@@ -713,6 +726,9 @@ body { font-family: 'Sora', sans-serif; background: var(--ef-bg); color: var(--e
 }
 
 @media (max-width: 400px) {
+  .ef-kpi-value { font-size: 16px; }
+  .ef-kpi-icon  { width: 32px; height: 32px; font-size: 15px; }
+  .ef-kpi-card .card-body { padding: 10px; }
   .ef-fab-amount-input { font-size: 36px; width: 140px; }
   .ef-fab-panel__body  { padding: 14px; }
 }
