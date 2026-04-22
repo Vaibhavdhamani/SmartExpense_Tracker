@@ -48,6 +48,10 @@
 * { box-sizing: border-box; }
 body { font-family: 'Sora', sans-serif; background: var(--ef-bg); color: var(--ef-text); margin: 0; transition: background-color .2s, color .2s; }
 
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
 /* ═══════════════════════════════════════
    LAYOUT
 ═══════════════════════════════════════ */
@@ -151,7 +155,7 @@ body { font-family: 'Sora', sans-serif; background: var(--ef-bg); color: var(--e
 .ef-main {
   margin-left: var(--ef-sidebar-w);
   flex: 1; display: flex; flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   transition: margin-left .25s ease;
 }
 .ef-layout--collapsed .ef-main { margin-left: 64px; }
@@ -256,7 +260,7 @@ body { font-family: 'Sora', sans-serif; background: var(--ef-bg); color: var(--e
 }
 
 /* ── Content ── */
-.ef-content { flex: 1; padding: 24px; background: var(--ef-bg); overflow-y: auto; }
+.ef-content { flex: 1; padding: 24px; background: var(--ef-bg); overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .ef-page    { max-width: 1200px; margin: 0 auto; }
 
 /* ── Mobile bottom nav ── */
@@ -679,7 +683,7 @@ body { font-family: 'Sora', sans-serif; background: var(--ef-bg); color: var(--e
   .ef-main { margin-left: 0 !important; }
 
   /* Content padding + bottom nav spacing */
-  .ef-content { padding: 16px; padding-bottom: calc(var(--ef-mobile-nav-h) + 80px); overflow-y: auto; }
+  .ef-content { padding: 16px; padding-bottom: calc(var(--ef-mobile-nav-h) + 120px); overflow-y: auto; }
 
   /* Topbar */
   .ef-topbar { padding: 0 14px; }
