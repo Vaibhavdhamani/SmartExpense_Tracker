@@ -4,7 +4,7 @@ import { useCurrency } from '../hooks/useCurrency';
 import { useSalary }   from '../hooks/useSalary';
 import axios from 'axios';
 
-const ML_URL = process.env.REACT_APP_ML_URL || 'http://localhost:5001';
+const ML_URL = process.env.REACT_APP_ML_URL;
 
 export default function PredictionsPage() {
   const { expenses, loading: expLoading } = useExpenses(90);

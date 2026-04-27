@@ -13,7 +13,7 @@
 const nodemailer = require('nodemailer');
 
 // No hardcoded localhost - uses env variable
-const APP_URL = (process.env.FRONTEND_URL || 'https://expensetrack.tech').replace(/\/$/, '');
+const APP_URL = (process.env.FRONTEND_URL).replace(/\/$/, '');
 
 let _transporter = null;
 function getTransporter() {
@@ -301,6 +301,53 @@ function emiReminderHtml(username, emis) {
     `${emis.length} EMI(s) due — Total ₹${totalDue.toLocaleString('en-IN')}`);
 }
 
+function resetCodeHtml(username, code) {
+  const content = `
+    <h2 style="margin:0 0 8px;color:#1e293b;font-size:24px;font-weight:800;">
+      🔐 Password Reset Request
+    </h2>
+
+    <p style="color:#64748b;font-size:15px;line-height:1.6;">
+      Hi ${username || 'User'}, we received a request to reset your ExpenseFlow password.
+    </p>
+
+    <div style="
+      background:#f8fafc;
+      border:2px dashed #4F46E5;
+      border-radius:16px;
+      padding:24px;
+      text-align:center;
+      margin:24px 0;
+    ">
+      <div style="font-size:13px;color:#64748b;margin-bottom:8px;">
+        Your Verification Code
+      </div>
+
+      <div style="
+        font-size:38px;
+        font-weight:900;
+        letter-spacing:8px;
+        color:#4F46E5;
+      ">
+        ${code}
+      </div>
+    </div>
+
+    ${alertBox('This code will expire in 10 minutes.', 'warning')}
+    ${alertBox('If you did not request password reset, ignore this email.', 'info')}
+
+    <p style="color:#94a3b8;font-size:13px;margin-top:20px;">
+      Never share this code with anyone.
+    </p>
+  `;
+
+  return baseTemplate(
+    'Password Reset Code',
+    content,
+    `Your ExpenseFlow verification code is ${code}`
+  );
+}
+
 // ── EXPORTS ──────────────────────────────────────────────────
 exports.sendWelcome = (to, username) =>
   sendEmail({to, subject:'🎉 Welcome to ExpenseFlow!', html:welcomeHtml(username)});
@@ -325,5 +372,14 @@ exports.sendEmiReminder = (to, username, emis) =>
   sendEmail({to,
     subject:`🏦 EMI Reminder — ₹${emis.reduce((s,e)=>s+e.amount,0).toLocaleString('en-IN')} due ${emis.some(e=>e.daysLeft<=1)?'Today/Tomorrow':'soon'}`,
     html:emiReminderHtml(username,emis)});
+
+exports.sendResetCode = (to, username, code) =>
+  sendEmail({
+    to,
+    subject: '🔐 ExpenseFlow Password Reset Code',
+    html: resetCodeHtml(username, code)
+  });
+
+
 
 exports.sendEmail = sendEmail;

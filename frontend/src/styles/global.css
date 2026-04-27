@@ -823,3 +823,13 @@ html, body {
 [data-bs-theme="dark"] .ef-currency-preview__note--info    { background: rgba(59,130,246,.12);  color: #93c5fd; }
 [data-bs-theme="dark"] .ef-currency-preview__note--success { background: rgba(34,197,94,.12);   color: #86efac; }
 [data-bs-theme="dark"] .ef-currency-preview__note--warning { background: rgba(245,158,11,.12);  color: #fcd34d; }
+
+.modal .form-control{
+  background:#fff !important;
+  color:#000 !important;
+}
+
+.modal .form-control:focus{
+  background:#fff !important;
+  color:#000 !important;
+}

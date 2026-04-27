@@ -10,6 +10,7 @@ connectDB();
 
 // ✅ FIXED CORS (www + non-www दोनों allow)
 const allowedOrigins = [
+  "http://localhost:3000",
   "https://expensetrack.tech",
   "https://www.expensetrack.tech"
 ];
