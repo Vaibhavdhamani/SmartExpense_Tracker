@@ -43,13 +43,23 @@ router.get('/summary', protect, async (req, res) => {
 
     // Daily breakdown
     const dayMap = {};
-    expenses.forEach(e => {
-      const day = e.date.toISOString().slice(0, 10);
-      dayMap[day] = (dayMap[day] || 0) + e.amount;
-    });
-    const dailyBreakdown = Object.entries(dayMap)
-      .map(([date, total]) => ({ date, total }))
-      .sort((a, b) => a.date.localeCompare(b.date));
+
+expenses.forEach(e => {
+  const d = new Date(e.date);
+
+  const day =
+    d.getFullYear() +
+    '-' +
+    String(d.getMonth() + 1).padStart(2, '0') +
+    '-' +
+    String(d.getDate()).padStart(2, '0');
+
+  dayMap[day] = (dayMap[day] || 0) + e.amount;
+});
+
+const dailyBreakdown = Object.entries(dayMap)
+  .map(([date, total]) => ({ date, total }))
+  .sort((a, b) => a.date.localeCompare(b.date));
 
     const amounts = expenses.map(e => e.amount);
     const stats = amounts.length > 0 ? {

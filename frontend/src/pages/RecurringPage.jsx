@@ -288,8 +288,8 @@ function RecurringFormModal({ categories, item, onClose, onSubmit, loading }) {
     const e = {};
     const desc = form.description === '__custom__' ? customDesc : form.description;
     if (!form.category)                    e.category    = 'Please select a category';
-    if (!form.amount || +form.amount <= 0) e.amount      = 'Valid amount dalo';
-    if (!desc.trim())                      e.description = 'Description dalo';
+    if (!form.amount || +form.amount <= 0) e.amount      = 'Enter a valid amount';
+    if (!desc.trim())                      e.description = 'Enter description';
     setErrors(e);
     return !Object.keys(e).length;
   };
@@ -690,7 +690,7 @@ function ConfirmModal({ item, onConfirm, onSkip, onClose, loading }) {
             onClick={onClose}
             style={{ flex: 1 }}
           >
-            Baad mein
+            Later
           </button>
           <button
             className="btn btn-outline-warning btn-sm"
@@ -754,7 +754,7 @@ function QuickScheduleModal({ item, onClose, onSave, loading }) {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 16 }}>Schedule Edit Karo</div>
+            <div style={{ fontWeight: 700, fontSize: 16 }}>Edit Schedule</div>
             <div style={{ fontSize: 13, color: 'var(--bs-secondary-color)', marginTop: 2 }}>
               {item.description} · ₹{item.amount?.toLocaleString('en-IN')}
             </div>
@@ -811,7 +811,7 @@ function QuickScheduleModal({ item, onClose, onSave, loading }) {
                 fontSize: 11, fontWeight: 700, letterSpacing: '0.07em',
                 textTransform: 'uppercase', color: 'var(--bs-secondary-color)',
                 marginBottom: 10,
-              }}>Which date?</div>
+              }}>Select Date</div>
               {/* Calendar grid */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 4 }}>
                 {['S','M','T','W','T','F','S'].map((d, i) => (
@@ -854,7 +854,7 @@ function QuickScheduleModal({ item, onClose, onSave, loading }) {
                 fontSize: 11, fontWeight: 700, letterSpacing: '0.07em',
                 textTransform: 'uppercase', color: 'var(--bs-secondary-color)',
                 marginBottom: 10,
-              }}>Kaunsa din?</div>
+              }}>Select Day</div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 {DAYS_SHORT.map((d, i) => (
                   <button
@@ -937,7 +937,7 @@ function QuickScheduleModal({ item, onClose, onSave, loading }) {
           >
             {loading
               ? <><span className="spinner-border spinner-border-sm me-2" />Saving…</>
-              : <><i className="bi bi-check-lg me-2" />Schedule Save Karo</>}
+              : <><i className="bi bi-check-lg me-2" />Save Schedule</>}
           </button>
         </div>
       </div>
@@ -1136,7 +1136,7 @@ export default function RecurringPage() {
   };
 
   const handleDelete = (id) => {
-    if (window.confirm('Is recurring expense ko delete karein?')) deleteRecurring(id);
+    if (window.confirm('Delete this recurring expense?')) deleteRecurring(id);
   };
 
   const totalMonthly = items
