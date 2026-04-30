@@ -12,7 +12,6 @@ const BASE_NAV = [
   { to: "/goals", icon: "bi-trophy-fill", label: "Goals" },
   { to: "/split", icon: "bi-scissors", label: "Split" },
   { to: "/subscriptions", icon: "bi-collection-fill", label: "Subscriptions" },
-  { to: "/ai-insights", icon: "bi-stars", label: "AI Insights" },
   { to: "/analytics", icon: "bi-bar-chart-fill", label: "Analytics" },
   { to: "/predictions", icon: "bi-graph-up-arrow", label: "Predictions" },
   { to: "/emi-calculator", icon: "bi-calculator-fill", label: "EMI" },
@@ -144,18 +143,6 @@ export default function MainLayout() {
                       style={{ fontSize: 10 }}
                     >
                       {dueItems.length}
-                    </span>
-                  )}
-                  {to === "/ai-insights" && (
-                    <span
-                      className="badge ms-auto"
-                      style={{
-                        fontSize: 9,
-                        background: "rgba(99,102,241,0.15)",
-                        color: "#6366f1",
-                      }}
-                    >
-                      NEW
                     </span>
                   )}
                 </span>
@@ -294,11 +281,6 @@ export default function MainLayout() {
                       icon: "bi-bar-chart-fill",
                       label: "Analytics",
                       to: "/analytics",
-                    },
-                    {
-                      icon: "bi-stars",
-                      label: "AI Insights",
-                      to: "/ai-insights",
                     },
                     {
                       icon: "bi-gear-fill",

@@ -11,7 +11,6 @@ import RecurringPage from "./pages/RecurringPage";
 import GoalsPage from "./pages/GoalsPage";
 import SplitPage from "./pages/SplitPage";
 import SubscriptionPage from "./pages/SubscriptionPage";
-import AIInsightsPage from "./pages/AIInsightsPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import PredictionsPage from "./pages/PredictionsPage";
 import EmiCalculatorPage from "./pages/EmiCalculatorPage";
@@ -82,7 +81,6 @@ export default function App() {
               <Route path="goals" element={<GoalsPage />} />
               <Route path="split" element={<SplitPage />} />
               <Route path="subscriptions" element={<SubscriptionPage />} />
-              <Route path="ai-insights" element={<AIInsightsPage />} />
               <Route path="analytics" element={<AnalyticsPage />} />
               <Route path="predictions" element={<PredictionsPage />} />
               <Route path="emi-calculator" element={<EmiCalculatorPage />} />

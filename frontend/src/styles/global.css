@@ -261,7 +261,6 @@ html, body {
 
 /* ── Content ── */
 .ef-content { flex: 1; padding: 24px; background: var(--ef-bg); overflow-y: auto; -webkit-overflow-scrolling: touch; }
-.ef-page    { max-width: 1200px; margin: 0 auto; }
 
 /* ── Mobile bottom nav ── */
 .ef-mobile-nav {
@@ -824,15 +823,6 @@ html, body {
 [data-bs-theme="dark"] .ef-currency-preview__note--success { background: rgba(34,197,94,.12);   color: #86efac; }
 [data-bs-theme="dark"] .ef-currency-preview__note--warning { background: rgba(245,158,11,.12);  color: #fcd34d; }
 
-.modal .form-control{
-  background:#fff !important;
-  color:#000 !important;
-}
-
-.modal .form-control:focus{
-  background:#fff !important;
-  color:#000 !important;
-}
 
 /* MOBILE NAV MAIN */
 .ef-mobile-nav{
@@ -891,4 +881,164 @@ html, body {
   background: rgba(99,102,241,.12);
   color: #6366f1;
   font-weight: 600;
+}
+
+.ef-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 12px;   /* ✅ keep this */
+  width: 100%;
+}
+
+/* MOBILE MODE */
+@media (max-width: 640px) {
+
+  /* Page padding */
+  .ef-page {
+    padding: 0 10px;
+  }
+
+  /* KPI → stack nicely */
+  .ef-admin-kpis {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  /* 2-column section → vertical */
+  .ef-admin-2col {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* USERS PAGE → STACK */
+  .ef-admin-users-layout {
+    flex-direction: column !important;
+    gap: 10px;
+  }
+
+  /* USER DETAIL → FULL WIDTH */
+  .ef-admin-users-layout > div:last-child {
+    width: 100% !important;
+    position: static !important;
+  }
+
+  /* USER ROW → MAKE IT CARD STYLE */
+  .ef-user-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px;
+  }
+
+  /* Buttons wrap */
+  .ef-user-actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
+/* KPI GRID */
+.ef-admin-kpis {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* FEATURES ROW */
+.ef-admin-features {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* 2 COLUMN SECTION */
+.ef-admin-2col {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+/* Tablets */
+@media (max-width: 768px) {
+  .ef-admin-kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ef-admin-features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ef-admin-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .ef-admin-kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .ef-admin-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= ANALYTICS PAGE RESPONSIVE ================= */
+
+/* KPI GRID */
+.ef-analytics-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+/* 2 COLUMN SECTION */
+.ef-analytics-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* 4 CARD GRID */
+.ef-analytics-4col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+/* TABS (buttons row) */
+.ef-analytics-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+  border-bottom: 0.5px solid var(--bs-border-color);
+  padding-bottom: 10px;
+}
+
+.ef-analytics-tabs button {
+  flex: 1 1 auto;
+  min-width: 110px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 992px) {
+  .ef-analytics-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .ef-analytics-kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .ef-analytics-4col {
+    grid-template-columns: 1fr;
+  }
+
+  .ef-analytics-2col {
+    grid-template-columns: 1fr;
+  }
 }

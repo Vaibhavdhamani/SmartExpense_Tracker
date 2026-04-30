@@ -18,6 +18,7 @@ from collections import defaultdict
 
 app = Flask(__name__)
 CORS(app, origins=[
+    "http://localhost:3000",
     "https://expensetrack.tech",
     "https://www.expensetrack.tech"
 ])

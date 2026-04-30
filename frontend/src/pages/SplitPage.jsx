@@ -97,8 +97,8 @@ function SplitFormModal({ categories, onClose, onSubmit, loading }) {
   const validate1 = () => {
     const e = {};
     if (!form.category)                         e.category = 'Please select a category';
-    if (!form.title.trim())                     e.title       = 'Title dalo';
-    if (!form.totalAmount || +form.totalAmount <= 0) e.totalAmount = 'Valid amount dalo';
+    if (!form.title.trim())                     e.title       = 'Enter title';
+    if (!form.totalAmount || +form.totalAmount <= 0) e.totalAmount = 'Enter valid amount';
     setErrors(e);
     return !Object.keys(e).length;
   };
@@ -106,7 +106,7 @@ function SplitFormModal({ categories, onClose, onSubmit, loading }) {
   const validate2 = () => {
     const e = {};
     const emptyNames = participants.filter(p => !p.name.trim());
-    if (emptyNames.length) { e.participants = 'Sabka naam bharo'; }
+    if (emptyNames.length) { e.participants = 'Enter all names'; }
     if (splitType === 'custom') {
       const diff = Math.abs(totalCustom - parseFloat(form.totalAmount));
       if (diff > 1) e.amounts = `Total ₹${totalCustom.toFixed(0)} must equal ₹${parseFloat(form.totalAmount).toFixed(0)}`;
@@ -280,9 +280,9 @@ function SplitFormModal({ categories, onClose, onSubmit, loading }) {
                   <span style={lbl}>Split Type</span>
                   <div style={{ display: 'flex', gap: 8 }}>
                     {[
-                      { val: 'equal',      label: 'Equal',      icon: 'bi-distribute-horizontal', desc: 'Sabka equal share' },
-                      { val: 'custom',     label: 'Custom ₹',   icon: 'bi-pencil-square',         desc: 'Manual amounts' },
-                      { val: 'percentage', label: 'Percent %',  icon: 'bi-percent',               desc: 'By percentage' },
+                      { val: 'equal',      label: 'Equal',      icon: 'bi-distribute-horizontal', desc: 'Equal share for everyone' },
+                      { val: 'custom',     label: 'Custom ₹',   icon: 'bi-pencil-square',         desc: 'Enter manual amounts' },
+                      { val: 'percentage', label: 'Percent %',  icon: 'bi-percent',               desc: 'Split by percentage' },
                     ].map(t => (
                       <button key={t.val} type="button"
                         onClick={() => setSplitType(t.val)}
@@ -329,7 +329,7 @@ function SplitFormModal({ categories, onClose, onSubmit, loading }) {
                         type="text"
                         className="form-control form-control-sm"
                         style={{ borderRadius: 8, flex: 2 }}
-                        placeholder={`Person ${idx + 1} ka naam`}
+                        placeholder={`Enter name of person ${idx + 1}`}
                         value={p.name}
                         disabled={p.isCreator}
                         onChange={e => updateParticipant(idx, 'name', e.target.value)}
@@ -678,7 +678,7 @@ export default function SplitPage() {
   };
 
   const handleDelete = (id) => {
-    if (window.confirm('Is split expense ko delete karein?')) deleteSplit(id);
+    if (window.confirm('Do you want to delete this split expense?')) deleteSplit(id);
   };
 
   const filteredSplits = splits.filter(s => {

@@ -295,8 +295,7 @@ export default function AdminDashboardPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
           {/* KPI Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 10 }}
-            className="ef-admin-kpis">
+          <div className="ef-admin-kpis" style={{ display: 'grid', gap: 10 }}>
             <KpiCard icon="bi-people-fill"      label="Total Users"
               value={s.users.total}
               sub={s.users.growth !== null ? `${s.users.growth > 0 ? '+' : ''}${s.users.growth}% MoM` : null}
@@ -323,7 +322,7 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Feature usage row */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
+          <div className="ef-admin-features" style={{ display: 'grid', gap: 10 }}>
             {[
               { label: 'Total Budgets',    val: s.features.budgets,   icon: 'bi-bullseye',      col: '#6366f1' },
               { label: 'Savings Goals',    val: s.features.goals,     icon: 'bi-trophy-fill',   col: '#22c55e' },
@@ -345,8 +344,7 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* 2-col: Signups chart + Top spenders */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}
-            className="ef-admin-2col">
+          <div className="ef-admin-2col" style={{ display: 'grid', gap: 14 }}>
 
             {/* Daily signups chart */}
             <div style={{ background: 'var(--bs-body-bg)',
@@ -480,6 +478,7 @@ export default function AdminDashboardPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {users.map(u => (
                   <div key={u._id}
+                    className="ef-user-row"
                     onClick={() => openUserDetail(u)}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 12,
@@ -512,7 +511,7 @@ export default function AdminDashboardPage() {
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                    <div className="ef-user-actions" style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                       {/* Role toggle */}
                       <button
                         onClick={e => { e.stopPropagation(); toggleRole(u); }}

@@ -416,10 +416,7 @@ export default function AnalyticsPage() {
       {data && !loading && (<>
 
         {/* ── KPI GRID ─────────────────────────────────────── */}
-        <div style={{
-          display:'grid', gap:10, marginBottom:16,
-          gridTemplateColumns:'repeat(2,1fr)',
-        }} className="ef-kpi-grid">
+        <div className="ef-analytics-kpis">
           <KpiCard icon="bi-cash-stack"   color="#6366f1" bg="rgba(99,102,241,0.1)"
             label="Total Spent" value={s.total||0}
             sub={s.changesPct!=null ? `${s.changesPct>0?'▲':'▼'} ${Math.abs(s.changesPct)}%`:null}
@@ -442,7 +439,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* ── TABS ─────────────────────────────────────────── */}
-        <div style={{ display:'flex', gap:4, marginBottom:16, flexWrap:'wrap', borderBottom:'0.5px solid var(--bs-border-color)', paddingBottom:10 }}>
+        <div className="ef-analytics-tabs">
           {[
             {val:'overview',     label:'Overview',     icon:'bi-grid-1x2'},
             {val:'categories',   label:'Categories',   icon:'bi-pie-chart'},
@@ -485,7 +482,7 @@ export default function AnalyticsPage() {
             )}
 
             {/* 2-col: Month Compare + Weekly Heatmap */}
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }} className="ef-2col">
+            <div className="ef-analytics-2col">
               {/* Month comparison */}
               <div style={{ background:'var(--bs-body-bg)', border:'0.5px solid var(--bs-border-color)', borderRadius:16, padding:'18px' }}>
                 <div style={{ fontWeight:700, fontSize:14, marginBottom:14 }}>
@@ -507,7 +504,7 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Stat cards row */}
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:10 }} className="ef-4col">
+            <div className="ef-analytics-4col">
               {[
                 { icon:'💸', label:'Largest Transaction',
                   val: s.maxTransaction ? format(s.maxTransaction.amount) : '—',
@@ -733,19 +730,6 @@ export default function AnalyticsPage() {
           <p className="text-muted">Choose monthly or yearly view above</p>
         </div>
       )}
-
-      <style>{`
-        @media(min-width:576px){
-          .ef-kpi-grid { grid-template-columns:repeat(4,1fr) !important; }
-          .ef-4col     { grid-template-columns:repeat(4,1fr) !important; }
-        }
-        @media(min-width:480px){
-          .ef-2col { grid-template-columns:1fr 1fr !important; }
-        }
-        @media(max-width:479px){
-          .ef-2col { grid-template-columns:1fr !important; }
-        }
-      `}</style>
     </div>
   );
 }

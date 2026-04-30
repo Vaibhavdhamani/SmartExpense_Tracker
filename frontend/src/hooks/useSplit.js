@@ -37,7 +37,7 @@ export function useSplit() {
       setSplits(sRes.data     || []);
       setSummary(sumRes.data  || null);
     } catch (err) {
-      toast(err.message || 'Splits load nahi hue', 'error');
+      toast(err.message || 'Failed to load splits', 'error');
     } finally { setLoading(false); }
   }, []);
 
@@ -47,11 +47,11 @@ export function useSplit() {
     setSubmitting(true);
     try {
       await apiFetch('POST', '/splits', payload);
-      toast('Split expense create ho gaya! 🎉', 'success');
+      toast('Split expense created successfully! 🎉', 'success');
       await fetchAll();
       return true;
     } catch (err) {
-      toast(err.message || 'Create nahi hua', 'error');
+      toast(err.message || 'Creation failed', 'error');
       return false;
     } finally { setSubmitting(false); }
   };
@@ -60,11 +60,11 @@ export function useSplit() {
     setSubmitting(true);
     try {
       await apiFetch('PUT', `/splits/${id}`, payload);
-      toast('Update ho gaya!', 'success');
+      toast('Updated successfully!', 'success');
       await fetchAll();
       return true;
     } catch (err) {
-      toast(err.message || 'Update nahi hua', 'error');
+      toast(err.message || 'Update failed', 'error');
       return false;
     } finally { setSubmitting(false); }
   };
@@ -72,30 +72,30 @@ export function useSplit() {
   const deleteSplit = async (id) => {
     try {
       await apiFetch('DELETE', `/splits/${id}`);
-      toast('Delete ho gaya', 'info');
+      toast('Deleted successfully', 'info');
       await fetchAll();
     } catch (err) {
-      toast(err.message || 'Delete nahi hua', 'error');
+      toast(err.message || 'Delete failed', 'error');
     }
   };
 
   const markPaid = async (splitId, participantId, name) => {
     try {
       await apiFetch('POST', `/splits/${splitId}/markpaid`, { participantId });
-      toast(`${name} ne pay kar diya! ✅`, 'success');
+      toast(`${name} has paid! ✅`, 'success');
       await fetchAll();
     } catch (err) {
-      toast(err.message || 'Mark paid nahi hua', 'error');
+      toast(err.message || 'Mark paid failed', 'error');
     }
   };
 
   const unmarkPaid = async (splitId, participantId, name) => {
     try {
       await apiFetch('POST', `/splits/${splitId}/unmarkpaid`, { participantId });
-      toast(`${name} ka payment undo kiya`, 'info');
+      toast(`${name}'s payment has been undone`, 'info');
       await fetchAll();
     } catch (err) {
-      toast(err.message || 'Undo nahi hua', 'error');
+      toast(err.message || 'Undo failed', 'error');
     }
   };
 
@@ -106,7 +106,7 @@ export function useSplit() {
       toast(`"${title}" fully settled! 🎉`, 'success');
       await fetchAll();
     } catch (err) {
-      toast(err.message || 'Settle nahi hua', 'error');
+      toast(err.message || 'Settle failed', 'error');
     } finally { setSubmitting(false); }
   };
 
