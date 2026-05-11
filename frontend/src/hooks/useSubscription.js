@@ -40,7 +40,7 @@ export function useSubscription() {
       setDueSubs(dRes.data    || []);
       setSummary(sumRes.data  || null);
     } catch (err) {
-      toast(err.message || 'Load nahi hua', 'error');
+      toast(err.message || 'Failed to load subscriptions', 'error');
     } finally { setLoading(false); }
   }, []);
 
@@ -50,11 +50,11 @@ export function useSubscription() {
     setSubmitting(true);
     try {
       await apiFetch('POST', '/subscriptions', payload);
-      toast('Subscription add ho gaya! 📦', 'success');
+      toast('Subscription created successfully! 📦', 'success');
       await fetchAll();
       return true;
     } catch (err) {
-      toast(err.message || 'Add nahi hua', 'error');
+      toast(err.message || 'Failed to create subscription', 'error');
       return false;
     } finally { setSubmitting(false); }
   };
@@ -63,11 +63,11 @@ export function useSubscription() {
     setSubmitting(true);
     try {
       await apiFetch('PUT', `/subscriptions/${id}`, payload);
-      toast('Update ho gaya!', 'success');
+      toast('Subscription updated successfully!', 'success');
       await fetchAll();
       return true;
     } catch (err) {
-      toast(err.message || 'Update nahi hua', 'error');
+      toast(err.message || 'Failed to update subscription', 'error');
       return false;
     } finally { setSubmitting(false); }
   };
@@ -79,7 +79,7 @@ export function useSubscription() {
       await fetchAll();
       return res.data;
     } catch (err) {
-      toast(err.message || 'Renew nahi hua', 'error');
+      toast(err.message || 'Failed to renew subscription', 'error');
     }
   };
 
@@ -89,17 +89,17 @@ export function useSubscription() {
       toast(`${name} cancelled`, 'info');
       await fetchAll();
     } catch (err) {
-      toast(err.message || 'Cancel nahi hua', 'error');
+      toast(err.message || 'Failed to cancel subscription', 'error');
     }
   };
 
   const deleteSub = async (id) => {
     try {
       await apiFetch('DELETE', `/subscriptions/${id}`);
-      toast('Delete ho gaya', 'info');
+      toast('Subscription deleted successfully', 'info');
       await fetchAll();
     } catch (err) {
-      toast(err.message || 'Delete nahi hua', 'error');
+      toast(err.message || 'Failed to delete subscription', 'error');
     }
   };
 

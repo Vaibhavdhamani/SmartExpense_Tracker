@@ -36,7 +36,7 @@ export function useGoals() {
       setGoals(gRes.data   || []);
       setSummary(sRes.data || null);
     } catch (err) {
-      toast(err.message || 'Goals load nahi hue', 'error');
+      toast(err.message || 'Failed to load goals', 'error');
     } finally { setLoading(false); }
   }, []);
 
@@ -46,11 +46,11 @@ export function useGoals() {
     setSubmitting(true);
     try {
       await apiFetch('POST', '/goals', payload);
-      toast('Goal set ho gaya! 🎯', 'success');
+      toast('Goal set successfully! 🎯', 'success');
       await fetchAll();
       return true;
     } catch (err) {
-      toast(err.message || 'Goal add nahi hua', 'error');
+      toast(err.message || 'Failed to create goal', 'error');
       return false;
     } finally { setSubmitting(false); }
   };
@@ -59,11 +59,11 @@ export function useGoals() {
     setSubmitting(true);
     try {
       await apiFetch('PUT', `/goals/${id}`, payload);
-      toast('Goal update ho gaya!', 'success');
+      toast('Goal updated successfully!', 'success');
       await fetchAll();
       return true;
     } catch (err) {
-      toast(err.message || 'Update nahi hua', 'error');
+      toast(err.message || 'Failed to update goal', 'error');
       return false;
     } finally { setSubmitting(false); }
   };
@@ -71,10 +71,10 @@ export function useGoals() {
   const deleteGoal = async (id) => {
     try {
       await apiFetch('DELETE', `/goals/${id}`);
-      toast('Goal delete ho gaya', 'info');
+      toast('Goal deleted successfully', 'info');
       await fetchAll();
     } catch (err) {
-      toast(err.message || 'Delete nahi hua', 'error');
+      toast(err.message || 'Failed to delete goal', 'error');
     }
   };
 
@@ -83,14 +83,14 @@ export function useGoals() {
     try {
       const res = await apiFetch('POST', `/goals/${id}/deposit`, { amount: Number(amount) });
       if (res.data.isCompleted) {
-        toast(`🎉 "${title}" goal complete ho gaya!`, 'success');
+        toast(`🎉 "${title}" goal completed successfully!`, 'success');
       } else {
-        toast(`₹${Number(amount).toLocaleString('en-IN')} add ho gaya!`, 'success');
+        toast(`₹${Number(amount).toLocaleString('en-IN')} added successfully!`, 'success');
       }
       await fetchAll();
       return true;
     } catch (err) {
-      toast(err.message || 'Deposit nahi hua', 'error');
+      toast(err.message || 'Failed to make deposit', 'error');
       return false;
     } finally { setSubmitting(false); }
   };
@@ -99,11 +99,11 @@ export function useGoals() {
     setSubmitting(true);
     try {
       await apiFetch('POST', `/goals/${id}/withdraw`, { amount: Number(amount) });
-      toast(`₹${Number(amount).toLocaleString('en-IN')} withdraw ho gaya`, 'info');
+      toast(`₹${Number(amount).toLocaleString('en-IN')} withdrawn successfully`, 'info');
       await fetchAll();
       return true;
     } catch (err) {
-      toast(err.message || 'Withdraw nahi hua', 'error');
+      toast(err.message || 'Failed to withdraw amount', 'error');
       return false;
     } finally { setSubmitting(false); }
   };

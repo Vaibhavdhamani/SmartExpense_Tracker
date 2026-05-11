@@ -51,7 +51,7 @@ export function useRecurring() {
       setItems(allRes.data    || []);
       setDueItems(dueRes.data || []);
     } catch (err) {
-      toast(err.message || 'Load nahi hua', 'error');
+      toast(err.message || 'Failed to load data', 'error');
     } finally {
       setLoading(false);
     }
@@ -64,11 +64,11 @@ export function useRecurring() {
     setSubmitting(true);
     try {
       await apiFetch('POST', '/recurring', payload);
-      toast('Recurring expense set ho gaya!', 'success');
+      toast('Recurring expense created successfully!', 'success');
       await fetchAll();
       return true;
     } catch (err) {
-      toast(err.message || 'Add nahi hua', 'error');
+      toast(err.message || 'Failed to create recurring expense', 'error');
       return false;
     } finally { setSubmitting(false); }
   };
@@ -78,11 +78,11 @@ export function useRecurring() {
     setSubmitting(true);
     try {
       await apiFetch('PUT', `/recurring/${id}`, payload);
-      toast('Update ho gaya!', 'success');
+      toast('Updated successfully!', 'success');
       await fetchAll();
       return true;
     } catch (err) {
-      toast(err.message || 'Update nahi hua', 'error');
+      toast(err.message || 'Failed to update recurring expense', 'error');
       return false;
     } finally { setSubmitting(false); }
   };
@@ -91,10 +91,10 @@ export function useRecurring() {
   const deleteRecurring = async (id) => {
     try {
       await apiFetch('DELETE', `/recurring/${id}`);
-      toast('Delete ho gaya', 'info');
+      toast('Deleted successfully', 'info');
       await fetchAll();
     } catch (err) {
-      toast(err.message || 'Delete nahi hua', 'error');
+      toast(err.message || 'Failed to delete recurring expense', 'error');
     }
   };
 
@@ -103,11 +103,11 @@ export function useRecurring() {
     setSubmitting(true);
     try {
       await apiFetch('POST', `/recurring/${id}/confirm`);
-      toast(`✅ "${name}" expense add ho gaya!`, 'success');
+      toast(`✅ "${name}" expense added successfully!`, 'success');
       await fetchAll();
       return true;
     } catch (err) {
-      toast(err.message || 'Confirm nahi hua', 'error');
+      toast(err.message || 'Failed to confirm due expense', 'error');
       return false;
     } finally { setSubmitting(false); }
   };
@@ -116,10 +116,10 @@ export function useRecurring() {
   const skipDue = async (id, name) => {
     try {
       await apiFetch('POST', `/recurring/${id}/skip`);
-      toast(`"${name}" skip ho gaya`, 'info');
+      toast(`"${name}" skipped successfully`, 'info');
       await fetchAll();
     } catch (err) {
-      toast(err.message || 'Skip nahi hua', 'error');
+      toast(err.message || 'Failed to skip due expense', 'error');
     }
   };
 

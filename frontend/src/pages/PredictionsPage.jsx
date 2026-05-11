@@ -398,11 +398,11 @@ export default function PredictionsPage() {
                 <i className="bi bi-info-circle me-2" />Algorithm v2
               </h6>
               {[
-                ['🛡️', 'Outlier Detection',   'IQR-based winsorization — ek bada expense prediction spoil nahi karega'],
-                ['📊', 'Monthly Buckets',      'Daily nahi, monthly totals pe kaam karta hai — sparse data handle karta hai'],
-                ['⚖️', 'Weighted Median',      'Mean nahi, median use karta hai — skewed data pe zyada accurate'],
-                ['📈', 'Damped Trend',         'Trend slope ±20% pe cap hai — ek expensive month prediction explode nahi karega'],
-                ['🕐', 'Recency Bias',         'Recent mahine ka weight 4x zyada — purane patterns irrelevant ho jaate hain'],
+                ['🛡️', 'Outlier Detection',   'IQR-based winsorization ensures that one unusually large expense does not spoil the prediction.'],
+                ['📊', 'Monthly Buckets',      'Works on monthly totals instead of daily data, helping handle sparse datasets effectively.'],
+                ['⚖️', 'Weighted Median',      'Uses median instead of mean, making predictions more accurate for skewed financial data.'],
+                ['📈', 'Damped Trend',         'Trend slope is capped at ±20%, preventing one expensive month from causing prediction explosion.'],
+                ['🕐', 'Recency Bias',         'Recent months are given 4x higher weight, while older spending patterns become less relevant.'],
               ].map(([icon, title, desc]) => (
                 <div key={title} style={{ display: 'flex', gap: 12, marginBottom: 14 }}>
                   <span style={{ fontSize: 20, flexShrink: 0 }}>{icon}</span>
